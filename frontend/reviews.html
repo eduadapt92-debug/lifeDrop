@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reviews — LifeDrop</title>
+  <script>try{if(localStorage.getItem('lifedrop_dark')==='true'){document.documentElement.style.background='#0A0A0C';}}catch(e){}</script>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <style>
+    /* ===== REVIEWS PAGE ===== */
+    .reviews-hero {
+      background: linear-gradient(135deg, var(--dark), var(--gray-900));
+      color: white;
+      padding: 52px 32px;
+      text-align: center;
+    }
+    .reviews-hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 10px; }
+    .reviews-hero p  { color: rgba(255,255,255,0.65); font-size: 0.95rem; }
+
+    .reviews-page { max-width: 860px; margin: 0 auto; padding: 40px 24px 72px; }
+
+    /* Rating summary */
+    .rating-summary-box {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+    .rating-big-side { text-align: center; flex-shrink: 0; }
+    .rating-big-num  { font-size: 4.5rem; font-weight: 900; line-height: 1; color: var(--dark); font-family: var(--mono); }
+    .rating-stars-row { display: flex; gap: 3px; margin: 8px 0 6px; justify-content: center; }
+    .rating-count-label { font-size: 0.78rem; color: var(--gray-500); white-space: nowrap; }
+    .rating-breakdown { flex: 1; }
+    .breakdown-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; cursor: pointer; }
+    .breakdown-row:last-child { margin-bottom: 0; }
+    .breakdown-label { font-size: 0.78rem; color: var(--gray-600); width: 22px; flex-shrink: 0; text-align: right; font-weight: 600; }
+    .breakdown-bar-track { flex: 1; height: 9px; background: var(--gray-100); border-radius: 5px; overflow: hidden; }
+    .breakdown-bar-fill  { height: 100%; background: #F59E0B; border-radius: 5px; transition: width 0.7s ease; }
+    .breakdown-pct { font-size: 0.72rem; color: var(--gray-400); width: 30px; text-align: right; }
+
+    /* Write review */
+    .write-review-box {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    .write-review-box .card-title { margin-bottom: 18px; }
+
+    .star-picker { display: flex; gap: 4px; margin-bottom: 8px; }
+    .star-picker-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 2.2rem; color: var(--gray-200);
+      padding: 0; line-height: 1; transition: color 0.1s, transform 0.1s;
+    }
+    .star-picker-btn:hover      { color: #FBBF24; transform: scale(1.15); }
+    .star-picker-btn.lit        { color: #F59E0B; }
+    .rating-hint { font-size: 0.8rem; color: var(--gray-500); margin-bottom: 14px; min-height: 1.1em; font-weight: 600; }
+
+    /* My review preview (inside write box) */
+    .my-review-preview {
+      border: 1.5px solid var(--red-border);
+      border-radius: var(--radius-sm);
+      background: var(--red-muted);
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .my-review-preview .review-title { margin-bottom: 4px; }
+    .my-review-preview .review-body  { font-size: 0.85rem; color: var(--gray-600); line-height: 1.65; margin-bottom: 12px; }
+
+    /* Login CTA */
+    .review-login-cta {
+      background: var(--gray-50);
+      border: 1.5px dashed var(--gray-300);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .review-login-cta p { color: var(--gray-600); margin: 12px 0 16px; font-size: 0.9rem; }
+
+    /* Filter bar */
+    .reviews-filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filter-tab {
+      padding: 6px 14px;
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      background: white;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--gray-600);
+      transition: var(--transition);
+    }
+    .filter-tab.active, .filter-tab:hover { background: var(--red); border-color: var(--red); color: white; }
+    .sort-select {
+      padding: 7px 12px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      background: white;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    /* Review card */
+    .review-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      transition: var(--transition);
+    }
+    .review-card:hover { box-shadow: var(--shadow-sm); }
+    .review-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 12px; }
+    .review-author-info { display: flex; align-items: center; gap: 11px; }
+    .review-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--red-muted); border: 2px solid var(--red-border);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.82rem; color: var(--red); flex-shrink: 0;
+    }
+    .review-author-name  { font-weight: 700; font-size: 0.9rem; color: var(--dark); }
+    .review-author-role  { font-size: 0.73rem; color: var(--gray-500); text-transform: capitalize; margin-top: 2px; }
+    .review-meta         { text-align: right; flex-shrink: 0; }
+    .review-stars-row    { display: flex; gap: 2px; justify-content: flex-end; margin-bottom: 4px; }
+    .review-date         { font-size: 0.7rem; color: var(--gray-400); }
+    .review-title        { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; color: var(--dark); }
+    .review-body         { font-size: 0.87rem; color: var(--gray-600); line-height: 1.65; margin-bottom: 14px; }
+    .review-footer       { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .helpful-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: 1px solid var(--gray-200);
+      border-radius: 20px; padding: 5px 12px;
+      font-size: 0.77rem; color: var(--gray-600); cursor: pointer;
+      transition: var(--transition);
+    }
+    .helpful-btn:hover, .helpful-btn.voted {
+      background: var(--gray-100); border-color: var(--gray-400); color: var(--dark);
+    }
+    .review-delete-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: none; border: none; color: var(--gray-400);
+      font-size: 0.77rem; cursor: pointer; padding: 5px;
+      transition: color 0.15s;
+    }
+    .review-delete-btn:hover { color: var(--red); }
+
+    /* Empty state */
+    .reviews-empty { text-align: center; padding: 56px 24px; color: var(--gray-500); }
+    .reviews-empty p { margin-top: 14px; font-size: 0.9rem; }
+
+    /* Dark mode */
+    body.dark .rating-summary-box { background: #161618; border-color: #2A2A2E; }
+    body.dark .write-review-box   { background: #161618; border-color: #2A2A2E; }
+    body.dark .review-login-cta   { background: #111113; border-color: #2A2A2E; }
+    body.dark .filter-tab         { background: #1C1C20; border-color: #2A2A2E; color: #9CA3AF; }
+    body.dark .filter-tab.active, body.dark .filter-tab:hover { background: var(--red); border-color: var(--red); color: white; }
+    body.dark .sort-select        { background: #1C1C20; border-color: #2A2A2E; color: #F9FAFB; }
+    body.dark .review-card        { background: #161618; border-color: #2A2A2E; }
+    body.dark .review-card:hover  { box-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+    body.dark .helpful-btn        { border-color: #2A2A2E; color: #9CA3AF; }
+    body.dark .helpful-btn:hover, body.dark .helpful-btn.voted { background: #1C1C20; border-color: #3A3A3E; color: #F9FAFB; }
+    body.dark .rating-big-num     { color: #F9FAFB; }
+    body.dark .breakdown-bar-track { background: #1C1C20; }
+    body.dark .review-title       { color: #F9FAFB; }
+    body.dark .review-author-name { color: #F9FAFB; }
+    body.dark .star-picker-btn    { color: #2A2A2E; }
+    body.dark .my-review-preview  { background: rgba(196,30,58,0.08); border-color: rgba(196,30,58,0.25); }
+
+    /* Responsive */
+    @media(max-width:768px) {
+      .rating-summary-box { flex-direction: column; align-items: flex-start; gap: 20px; padding: 20px; }
+      .reviews-page       { padding: 28px 16px 52px; }
+      .write-review-box   { padding: 18px 16px; }
+      .reviews-filter-bar { flex-direction: column; align-items: flex-start; }
+      .review-card        { padding: 16px; }
+    }
+    @media(max-width:480px) {
+      .reviews-hero     { padding: 36px 16px; }
+      .reviews-hero h1  { font-size: 1.65rem; }
+      .rating-big-num   { font-size: 3.5rem; }
+      .filter-tabs      { gap: 4px; }
+      .filter-tab       { padding: 5px 10px; font-size: 0.73rem; }
+      .star-picker-btn  { font-size: 1.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>
+      Life<span class="drop">Drop</span>
+    </a>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="reviews.html" class="active">Reviews</a>
+    </div>
+    <div class="navbar-actions">
+      <button class="icon-btn dark-toggle" title="Toggle dark mode"></button>
+      <div class="user-chip" id="userChip" onclick="handleUserChip()">
+        <div class="avatar" data-user-avatar>—</div>
+        <span data-user-name>Account</span>
+      </div>
+      <button class="menu-toggle" id="menuToggle" title="Menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-nav-menu" id="mobileMenu">
+    <button class="mobile-nav-close" id="mobileMenuClose">✕</button>
+    <a href="index.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+    <a href="inventory.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-5.5 8-8 12-8 15a8 8 0 0 0 16 0c0-3-2.5-7-8-15z"/></svg> Blood Inventory</a>
+    <a href="about.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg> About</a>
+    <a href="faq.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> FAQ</a>
+    <a href="reviews.html" class="active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Reviews</a>
+    <a href="blood-request.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Emergency Request</a>
+    <div style="border-top:1px solid var(--gray-100);margin-top:8px;padding-top:8px;">
+      <a id="mobileAccountLink" href="login.html" class="btn btn-primary" style="width:100%;justify-content:center;">Sign In</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="reviews-hero">
+    <h1>Community Reviews</h1>
+    <p>See what donors, hospitals, and recipients say about LifeDrop</p>
+  </div>
+
+  <div class="reviews-page">
+
+    <!-- RATING SUMMARY -->
+    <div class="rating-summary-box" id="ratingSummary">
+      <div style="color:var(--gray-400);font-size:0.85rem;">Loading ratings…</div>
+    </div>
+
+    <!-- WRITE / MY REVIEW AREA (rendered by JS) -->
+    <div id="reviewFormArea"></div>
+
+    <!-- FILTER BAR -->
+    <div class="reviews-filter-bar">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-rating="0">All</button>
+        <button class="filter-tab" data-rating="5">5 ★</button>
+        <button class="filter-tab" data-rating="4">4 ★</button>
+        <button class="filter-tab" data-rating="3">3 ★</button>
+        <button class="filter-tab" data-rating="2">2 ★</button>
+        <button class="filter-tab" data-rating="1">1 ★</button>
+      </div>
+      <select class="sort-select" id="sortSelect">
+        <option value="-createdAt">Newest First</option>
+        <option value="createdAt">Oldest First</option>
+        <option value="-helpfulVotes">Most Helpful</option>
+        <option value="-rating">Highest Rated</option>
+        <option value="rating">Lowest Rated</option>
+      </select>
+    </div>
+
+    <!-- REVIEWS LIST -->
+    <div id="reviewsList"></div>
+    <div id="loadMoreWrap" style="display:none;text-align:center;margin-top:20px;">
+      <button class="btn btn-outline" id="loadMoreBtn">Load More Reviews</button>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="navbar-brand" style="color:white;">
+          <div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>
+          Life<span style="color:var(--red)">Drop</span>
+        </div>
+        <p>Real-time blood donation management connecting donors, hospitals, and recipients across Cameroon.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Network</h4>
+        <a href="index.html">Home</a>
+        <a href="inventory.html">Blood Inventory</a>
+        <a href="about.html">About LifeDrop</a>
+        <a href="blood-request.html">Emergency Request</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="register.html">Become a Donor</a>
+        <a href="faq.html">FAQ</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Emergency</h4>
+        <div class="footer-emergency">+237 600 BLOOD</div>
+        <a href="mailto:emergency@lifedrop.com" style="margin-top:10px;display:block;">emergency@lifedrop.com</a>
+        <p style="font-size:0.75rem;margin-top:10px;color:var(--gray-500);">Available 24/7 for critical requests</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 LifeDrop. All rights reserved.</span>
+      <span>Built to save lives · Cameroon</span>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // ===== STATE =====
+    let currentPage   = 1;
+    let currentRating = 0;
+    let currentSort   = '-createdAt';
+    let totalPages    = 1;
+    let myReview      = null;
+    let editMode      = false;
+    let selectedRating = 0;
+
+    const RATING_LABELS = ['', 'Terrible', 'Poor', 'Average', 'Good', 'Excellent'];
+
+    // ===== HELPERS =====
+    function starsHtml(rating, size) {
+      const sz = size || '1rem';
+      return [1,2,3,4,5].map(i =>
+        `<span style="color:${i <= rating ? '#F59E0B' : '#D1D5DB'};font-size:${sz};">★</span>`
+      ).join('');
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function displayName(fullName) {
+      const parts = (fullName || 'User').split(' ');
+      if (parts.length < 2) return parts[0];
+      return parts[0] + ' ' + parts[parts.length - 1][0] + '.';
+    }
+
+    function initials(fullName) {
+      return (fullName || 'U').split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+    }
+
+    // ===== RATING SUMMARY =====
+    async function loadStats() {
+      try {
+        const data = await api.reviews.getAll({ limit: 1, page: 1 });
+        const { average, breakdown, totalAll } = data;
+        document.getElementById('ratingSummary').innerHTML = `
+          <div class="rating-big-side">
+            <div class="rating-big-num">${totalAll > 0 ? average.toFixed(1) : '—'}</div>
+            <div class="rating-stars-row">${starsHtml(Math.round(average), '1.4rem')}</div>
+            <div class="rating-count-label">${totalAll} review${totalAll !== 1 ? 's' : ''}</div>
+          </div>
+          <div class="rating-breakdown">
+            ${breakdown.map(b => {
+              const pct = totalAll > 0 ? Math.round((b.count / totalAll) * 100) : 0;
+              return `<div class="breakdown-row" onclick="filterByRating(${b.rating})" title="Filter ${b.rating}★">
+                <span class="breakdown-label">${b.rating}★</span>
+                <div class="breakdown-bar-track"><div class="breakdown-bar-fill" style="width:${pct}%"></div></div>
+                <span class="breakdown-pct">${pct}%</span>
+              </div>`;
+            }).join('')}
+          </div>
+        `;
+      } catch {
+        document.getElementById('ratingSummary').innerHTML =
+          '<p style="color:var(--gray-400);font-size:0.85rem;">Could not load rating summary.</p>';
+      }
+    }
+
+    function filterByRating(rating) {
+      currentRating = rating;
+      document.querySelectorAll('.filter-tab').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.rating) === rating);
+      });
+      loadReviews(true);
+    }
+
+    // ===== REVIEWS LIST =====
+    async function loadReviews(reset) {
+      if (reset) currentPage = 1;
+      const listEl = document.getElementById('reviewsList');
+      if (reset) listEl.innerHTML = '<div style="padding:24px;text-align:center;color:var(--gray-400);font-size:0.85rem;">Loading…</div>';
+
+      try {
+        const data = await api.reviews.getAll({
+          page:   currentPage,
+          limit:  10,
+          rating: currentRating || undefined,
+          sort:   currentSort,
+        });
+        totalPages = data.pages;
+        if (reset) listEl.innerHTML = '';
+
+        if (data.reviews.length === 0 && currentPage === 1) {
+          listEl.innerHTML = `<div class="reviews-empty">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p>No reviews yet${currentRating ? ' at this rating' : ''}. Be the first to share your experience!</p>
+          </div>`;
+        } else {
+          data.reviews.forEach(r => listEl.insertAdjacentHTML('beforeend', renderReviewCard(r)));
+        }
+
+        document.getElementById('loadMoreWrap').style.display =
+          currentPage < totalPages ? 'block' : 'none';
+      } catch {
+        listEl.innerHTML = '<p style="text-align:center;padding:28px;color:var(--gray-500);">Could not load reviews. Make sure the backend is running.</p>';
+      }
+    }
+
+    function renderReviewCard(r) {
+      const user     = Auth.getUser();
+      const isOwner  = user && r.user && r.user._id === user._id;
+      const isAdmin  = user && user.role === 'admin';
+      const name     = r.user ? r.user.name : 'User';
+      const role     = r.user ? r.user.role : '';
+      const showActions = Auth.isLoggedIn();
+
+      return `<div class="review-card" id="rev-${r._id}">
+        <div class="review-card-header">
+          <div class="review-author-info">
+            <div class="review-avatar">${initials(name)}</div>
+            <div>
+              <div class="review-author-name">${escHtml(displayName(name))}</div>
+              <div class="review-author-role">${escHtml(role)}</div>
+            </div>
+          </div>
+          <div class="review-meta">
+            <div class="review-stars-row">${starsHtml(r.rating)}</div>
+            <div class="review-date">${formatDate(r.createdAt)}</div>
+          </div>
+        </div>
+        <div class="review-title">${escHtml(r.title)}</div>
+        <div class="review-body">${escHtml(r.body)}</div>
+        <div class="review-footer">
+          ${showActions ? `<button class="helpful-btn" onclick="toggleHelpful('${r._id}',this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+            <span class="helpful-count">Helpful (${r.helpfulVotes || 0})</span>
+          </button>` : `<span style="font-size:0.75rem;color:var(--gray-400);">${r.helpfulVotes || 0} found this helpful</span>`}
+          ${(isOwner || isAdmin) ? `<button class="review-delete-btn" onclick="deleteReview('${r._id}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Delete
+          </button>` : ''}
+        </div>
+      </div>`;
+    }
+
+    // ===== FORM =====
+    function renderForm() {
+      const area = document.getElementById('reviewFormArea');
+      if (!Auth.isLoggedIn()) {
+        area.innerHTML = `<div class="review-login-cta">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <p>Sign in to rate and review LifeDrop</p>
+          <a href="login.html?redirect=reviews.html" class="btn btn-primary btn-sm">Sign In to Review</a>
+          <span style="display:inline-block;margin:0 10px;color:var(--gray-400);">or</span>
+          <a href="register.html" class="btn btn-outline btn-sm">Create Account</a>
+        </div>`;
+        return;
+      }
+
+      const hasReview = myReview && myReview._id;
+
+      area.innerHTML = `<div class="write-review-box">
+        <div class="card-title">${hasReview ? 'Your Review' : 'Write a Review'}</div>
+
+        ${hasReview ? `<div class="my-review-preview" id="myReviewPreview">
+          <div class="review-stars-row" style="justify-content:flex-start;margin-bottom:8px;">${starsHtml(myReview.rating)}</div>
+          <div class="review-title">${escHtml(myReview.title)}</div>
+          <div class="review-body">${escHtml(myReview.body)}</div>
+          <div class="review-footer">
+            <button class="helpful-btn" onclick="showEditForm()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit Review
+            </button>
+            <button class="review-delete-btn" onclick="deleteMyReview()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              Delete My Review
+            </button>
+          </div>
+        </div>` : ''}
+
+        <div id="reviewFormInner" style="${hasReview && !editMode ? 'display:none' : ''}">
+          <div class="star-picker" id="starPicker">
+            ${[1,2,3,4,5].map(i =>
+              `<button type="button" class="star-picker-btn" data-val="${i}" onclick="setRating(${i})" onmouseenter="hoverRating(${i})" onmouseleave="unhoverRating()">★</button>`
+            ).join('')}
+          </div>
+          <div class="rating-hint" id="ratingHint">Click to rate</div>
+          <div class="form-group">
+            <label class="form-label">Title *</label>
+            <input type="text" id="reviewTitle" class="form-input" placeholder="Summarize your experience" maxlength="100" value="${hasReview ? escHtml(myReview.title) : ''}"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Review *</label>
+            <textarea id="reviewBody" class="form-input" rows="4" placeholder="Tell us more about your experience with LifeDrop…" maxlength="1000">${hasReview ? escHtml(myReview.body) : ''}</textarea>
+          </div>
+          <div style="font-size:0.75rem;color:var(--gray-500);margin-bottom:14px;" id="charCount">0 / 1000 characters</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-primary" id="submitReviewBtn" onclick="submitReview()">
+              ${hasReview ? 'Update Review' : 'Submit Review'}
+            </button>
+            ${hasReview ? `<button class="btn btn-outline" onclick="cancelEdit()">Cancel</button>` : ''}
+          </div>
+        </div>
+      </div>`;
+
+      // Re-apply selected rating if editing
+      if (hasReview) setRating(myReview.rating, true);
+
+      // Char counter
+      const bodyEl = document.getElementById('reviewBody');
+      if (bodyEl) {
+        updateCharCount(bodyEl);
+        bodyEl.addEventListener('input', () => updateCharCount(bodyEl));
+      }
+    }
+
+    function updateCharCount(el) {
+      const counter = document.getElementById('charCount');
+      if (counter) counter.textContent = `${el.value.length} / 1000 characters`;
+    }
+
+    function setRating(val, silent) {
+      selectedRating = val;
+      const hint = document.getElementById('ratingHint');
+      if (hint) hint.textContent = RATING_LABELS[val] || 'Click to rate';
+      document.querySelectorAll('.star-picker-btn').forEach((btn, i) => {
+        btn.classList.toggle('lit', i < val);
+      });
+    }
+
+    function hoverRating(val) {
+      document.querySelectorAll('.star-picker-btn').forEach((btn, i) => {
+        btn.style.color = i < val ? '#FBBF24' : '';
+      });
+    }
+
+    function unhoverRating() {
+      document.querySelectorAll('.star-picker-btn').forEach((btn, i) => {
+        btn.style.color = '';
+        btn.classList.toggle('lit', i < selectedRating);
+      });
+    }
+
+    function showEditForm() {
+      editMode = true;
+      const inner = document.getElementById('reviewFormInner');
+      if (inner) inner.style.display = '';
+    }
+
+    function cancelEdit() {
+      editMode = false;
+      const inner = document.getElementById('reviewFormInner');
+      if (inner) inner.style.display = 'none';
+    }
+
+    // ===== SUBMIT / UPDATE =====
+    async function submitReview() {
+      const titleEl = document.getElementById('reviewTitle');
+      const bodyEl  = document.getElementById('reviewBody');
+      const btn     = document.getElementById('submitReviewBtn');
+      const title   = titleEl ? titleEl.value.trim() : '';
+      const body    = bodyEl  ? bodyEl.value.trim()  : '';
+
+      if (!selectedRating)    return showToast('Rating required', 'Please click a star to rate', 'warning');
+      if (!title)             return showToast('Title required', 'Please enter a review title', 'warning');
+      if (body.length < 10)   return showToast('Review too short', 'Please write at least 10 characters', 'warning');
+
+      btn.disabled = true;
+      btn.textContent = myReview ? 'Updating…' : 'Submitting…';
+
+      try {
+        if (myReview && myReview._id) {
+          await api.reviews.update(myReview._id, { rating: selectedRating, title, body });
+          showToast('Updated', 'Your review has been updated', 'success');
+        } else {
+          await api.reviews.create({ rating: selectedRating, title, body });
+          showToast('Thank you!', 'Your review has been submitted', 'success');
+        }
+        editMode = false;
+        selectedRating = 0;
+        await refreshAll();
+      } catch (err) {
+        showToast('Error', err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = myReview ? 'Update Review' : 'Submit Review';
+      }
+    }
+
+    // ===== DELETE =====
+    async function deleteMyReview() {
+      if (!confirm('Delete your review? This cannot be undone.')) return;
+      try {
+        await api.reviews.delete(myReview._id);
+        myReview = null;
+        editMode = false;
+        selectedRating = 0;
+        renderForm();
+        await loadStats();
+        await loadReviews(true);
+        showToast('Deleted', 'Your review has been removed', 'success');
+      } catch (err) {
+        showToast('Error', err.message, 'error');
+      }
+    }
+
+    async function deleteReview(id) {
+      if (!confirm('Delete this review?')) return;
+      try {
+        await api.reviews.delete(id);
+        document.getElementById('rev-' + id)?.remove();
+        if (myReview && myReview._id === id) { myReview = null; renderForm(); }
+        await loadStats();
+        showToast('Deleted', 'Review removed', 'success');
+      } catch (err) {
+        showToast('Error', err.message, 'error');
+      }
+    }
+
+    // ===== HELPFUL =====
+    async function toggleHelpful(id, btn) {
+      if (!Auth.isLoggedIn()) { window.location.href = 'login.html?redirect=reviews.html'; return; }
+      try {
+        const res   = await api.reviews.markHelpful(id);
+        const count = document.querySelector(`#rev-${id} .helpful-count`);
+        if (count) count.textContent = `Helpful (${res.helpfulVotes})`;
+        btn.classList.toggle('voted', res.voted);
+      } catch (err) {
+        showToast('Error', err.message, 'error');
+      }
+    }
+
+    // ===== REFRESH =====
+    async function refreshAll() {
+      await checkMyReview();
+      renderForm();
+      await loadStats();
+      await loadReviews(true);
+    }
+
+    async function checkMyReview() {
+      if (!Auth.isLoggedIn()) return;
+      try {
+        const r = await api.reviews.getMyReview();
+        myReview = (r && r._id) ? r : null;
+        if (myReview) selectedRating = myReview.rating;
+      } catch { myReview = null; }
+    }
+
+    // ===== NAV HELPERS =====
+    function handleUserChip() {
+      if (Auth.isLoggedIn()) {
+        const role = Auth.getUser()?.role;
+        const routes = { donor:'donor-dashboard.html', hospital:'hospital-dashboard.html', recipient:'recipient-dashboard.html', admin:'admin-dashboard.html' };
+        window.location.href = routes[role] || 'login.html';
+      } else {
+        window.location.href = 'login.html';
+      }
+    }
+
+    function initMobileAccountLink() {
+      const link = document.getElementById('mobileAccountLink');
+      if (!link) return;
+      if (Auth.isLoggedIn()) {
+        const user   = Auth.getUser();
+        const routes = { donor:'donor-dashboard.html', hospital:'hospital-dashboard.html', recipient:'recipient-dashboard.html', admin:'admin-dashboard.html' };
+        link.href        = routes[user?.role] || 'login.html';
+        link.textContent = 'My Dashboard →';
+      }
+    }
+
+    // ===== EVENT LISTENERS =====
+    document.getElementById('filterTabs').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-tab');
+      if (!btn) return;
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentRating = parseInt(btn.dataset.rating) || 0;
+      loadReviews(true);
+    });
+
+    document.getElementById('sortSelect').addEventListener('change', e => {
+      currentSort = e.target.value;
+      loadReviews(true);
+    });
+
+    document.getElementById('loadMoreBtn').addEventListener('click', () => {
+      currentPage++;
+      loadReviews(false);
+    });
+
+    // ===== INIT =====
+    (async function init() {
+      initMobileAccountLink();
+      await checkMyReview();
+      renderForm();
+      await loadStats();
+      await loadReviews(true);
+    })();
+  </script>
+</body>
+</html>

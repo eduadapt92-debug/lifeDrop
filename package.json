@@ -1,0 +1,12 @@
+{
+  "name": "lifedrop-complete",
+  "version": "1.0.0",
+  "description": "LifeDrop - Web-Based Blood Donation Management System",
+  "scripts": {
+    "build": "echo \"No build step for this project\"",
+    "start": "npm --prefix backend start",
+    "dev": "npm --prefix backend run dev",
+    "seed": "npm --prefix backend run seed",
+    "install": "npm --prefix backend install"
+  }
+}

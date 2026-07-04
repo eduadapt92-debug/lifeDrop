@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ — LifeDrop</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <style>
+    .faq-page { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+    .faq-hero { text-align: center; margin-bottom: 48px; }
+    .faq-hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 10px; }
+    .faq-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+    .faq-tab { padding: 8px 18px; border-radius: 20px; border: 1.5px solid var(--gray-200); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: var(--transition); color: var(--gray-700); }
+    .faq-tab.active { background: var(--red); border-color: var(--red); color: white; }
+    .faq-tab:hover:not(.active) { border-color: var(--red); color: var(--red); }
+    .faq-group { margin-bottom: 32px; }
+    .faq-group-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-500); margin-bottom: 12px; }
+    .faq-item { border: 1px solid var(--gray-200); border-radius: var(--radius-sm); margin-bottom: 8px; overflow: hidden; }
+    .faq-question { padding: 16px 18px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: var(--transition); }
+    .faq-question:hover { background: var(--gray-100); }
+    .faq-question.open { background: var(--red-muted); color: var(--red); }
+    .faq-chevron { font-size: 0.8rem; transition: transform 0.2s; }
+    .faq-question.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer { display: none; padding: 0 18px 16px; font-size: 0.875rem; color: var(--gray-700); line-height: 1.8; }
+    .faq-answer.open { display: block; }
+  </style>
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand"><div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>Life<span class="drop">Drop</span></a>
+    <div class="navbar-links">
+      <a href="index.html">Home</a><a href="inventory.html">Inventory</a>
+      <a href="about.html">About</a><a href="faq.html" class="active">FAQ</a>
+      <a href="reviews.html">Reviews</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="register.html" class="btn btn-primary btn-sm">Join LifeDrop</a>
+    </div>
+  </nav>
+
+  <div class="faq-page">
+    <div class="faq-hero">
+      <h1>Frequently Asked Questions</h1>
+      <p style="color:var(--gray-500);">Everything you need to know about LifeDrop and blood donation.</p>
+    </div>
+
+    <div class="faq-tabs">
+      <div class="faq-tab active" onclick="filterFAQ('all', this)">All Questions</div>
+      <div class="faq-tab" onclick="filterFAQ('donors', this)">For Donors</div>
+      <div class="faq-tab" onclick="filterFAQ('recipients', this)">For Recipients</div>
+      <div class="faq-tab" onclick="filterFAQ('hospitals', this)">For Hospitals</div>
+      <div class="faq-tab" onclick="filterFAQ('technical', this)">Technical</div>
+    </div>
+
+    <!-- DONORS -->
+    <div class="faq-group" data-cat="donors">
+      <div class="faq-group-title">For Blood Donors</div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">Who can donate blood?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Anyone aged 17–65 who weighs at least 50kg, is generally healthy, and has not donated in the last 56 days (8 weeks). Certain medical conditions may temporarily or permanently disqualify you — the platform will guide you through a self-assessment when you register.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">How often can I donate?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Whole blood: once every 56 days (8 weeks). Platelets: every 7 days (up to 24 times/year). Plasma: every 28 days. LifeDrop tracks your last donation date and will notify you when you're eligible again.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">Will I get notified when someone needs my blood group?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Yes! When a blood request matching your blood group is created in your city, you'll receive an instant push notification (and email if configured). You can choose to accept or decline the request from your dashboard.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">What is the Donor Tier system?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">LifeDrop rewards frequent donors with tier recognition: Bronze (1–4 donations), Silver (5–9), Gold (10–19), Platinum (20+). Higher tiers earn more points, priority visibility in the donor matching system, and digital certificates of recognition.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">Is my personal data safe?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Absolutely. Your personal data is encrypted and never shared with third parties. Hospitals only see your blood group and general location — never your full personal details — until you accept a donation request.</div>
+      </div>
+    </div>
+
+    <!-- RECIPIENTS -->
+    <div class="faq-group" data-cat="recipients">
+      <div class="faq-group-title">For Blood Recipients</div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">How do I request blood urgently?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Go to the <a href="blood-request.html" style="color:var(--red);">Emergency Request</a> page and fill in the blood group, quantity, location, and urgency level. Your request will be broadcast immediately to eligible donors near you. No account required for emergency requests.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">How long does it take to find a donor?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Our average response time is 45 minutes for critical requests in urban areas. Response times may vary depending on your location, the requested blood group, and donor availability. O- blood (universal donor) typically has the fastest response.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">Is there a cost to request blood?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">LifeDrop's matching service is completely free. Blood donation itself is voluntary and free by law. You may incur standard hospital fees for the collection and processing procedure, which vary by institution.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">What if I don't know my blood group?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">You can request any blood group or select "Unknown". The hospital will verify compatibility before transfusion. We recommend getting your blood group tested — any partner hospital on LifeDrop can do this quickly.</div>
+      </div>
+    </div>
+
+    <!-- HOSPITALS -->
+    <div class="faq-group" data-cat="hospitals">
+      <div class="faq-group-title">For Hospitals & Blood Banks</div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">How does my hospital join the LifeDrop network?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Register on the <a href="register.html" style="color:var(--red);">registration page</a> as a Hospital or Blood Bank. Upload your authorization documents. Our admin team will verify your institution within 48 hours and grant you full access to the Hospital Dashboard.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">How does real-time inventory work?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Hospital staff update blood inventory directly from the dashboard. The system automatically calculates status (Critical/Low/Moderate/Stable/Optimal) and triggers alerts when stock falls below thresholds. Low-stock alerts notify admins and suggest donor outreach.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">Can I notify specific donors directly?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Yes. The Donor Match feature lets you see eligible donors near your location and send them direct notifications from your dashboard. Donors who match your needed blood group and are within the 56-day eligibility window are surfaced first.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">Is there an API for our existing hospital system?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Yes! LifeDrop offers a REST API that can integrate with existing hospital management systems. Contact us at <a href="mailto:api@lifedrop.com" style="color:var(--red);">api@lifedrop.com</a> for API documentation and integration support.</div>
+      </div>
+    </div>
+
+    <!-- TECHNICAL -->
+    <div class="faq-group" data-cat="technical">
+      <div class="faq-group-title">Technical Questions</div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">How does the blood type matching algorithm work?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Our algorithm considers ABO/Rh compatibility, donor eligibility (56-day rule), location proximity (city and area scoring), and donor availability status. Donors are ranked by compatibility score and recency of last donation.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">Does LifeDrop work offline?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">LifeDrop requires an internet connection for real-time features. Emergency requests, donor matching, and inventory updates require connectivity. We're working on a lightweight offline mode for areas with intermittent connectivity.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">What devices are supported?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">LifeDrop works on any modern browser including Chrome, Firefox, Safari, and Edge. The interface is fully responsive and optimized for mobile phones, tablets, and desktops.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">How are notifications sent?<span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Notifications are delivered via real-time WebSocket (Socket.IO) when you're online, and via email for offline users. SMS notifications are in development for areas with limited data connectivity.</div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div style="background:var(--gray-100);border-radius:var(--radius);padding:28px;text-align:center;margin-top:40px;">
+      <h3 style="font-weight:800;margin-bottom:8px;">Still have questions?</h3>
+      <p style="color:var(--gray-500);margin-bottom:16px;">Our team is here to help, 24/7 for emergencies.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="contact.html" class="btn btn-outline">Contact Us</a>
+        <a href="blood-request.html" class="btn btn-primary">Emergency Request</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand"><div style="font-weight:800;color:white;margin-bottom:8px;">LifeDrop</div><p>Saving lives at the speed of light.</p></div>
+      <div class="footer-col"><h4>Quick Links</h4><a href="index.html">Home</a><a href="inventory.html">Inventory</a><a href="register.html">Register</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 LifeDrop · Cameroon 🇨🇲</span></div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function toggleFAQ(el) {
+      const answer = el.nextElementSibling;
+      const isOpen = el.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-question.open').forEach(q => {
+        q.classList.remove('open');
+        q.nextElementSibling.classList.remove('open');
+      });
+      if (!isOpen) {
+        el.classList.add('open');
+        answer.classList.add('open');
+      }
+    }
+    function filterFAQ(cat, tabEl) {
+      document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
+      tabEl.classList.add('active');
+      document.querySelectorAll('.faq-group').forEach(g => {
+        g.style.display = cat === 'all' || g.dataset.cat === cat ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

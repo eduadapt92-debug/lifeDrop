@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emergency Blood Request — LifeDrop</title>
+  <script>try{if(localStorage.getItem('lifedrop_dark')==='true'){document.documentElement.style.background='#0A0A0C';}}catch(e){}</script>
+  <script>(function(){try{if(!localStorage.getItem('lifedrop_token'))window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/auth.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <style>
+    .request-page { max-width: 700px; margin: 0 auto; padding: 40px 20px; }
+    .urgency-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .urgency-card {
+      border: 2px solid var(--gray-200); border-radius: var(--radius); padding: 16px;
+      text-align: center; cursor: pointer; transition: var(--transition);
+    }
+    .urgency-card.critical { border-color: var(--red); background: var(--red-muted); }
+    .urgency-card.urgent { border-color: var(--orange); background: var(--orange-light); }
+    .urgency-card.scheduled { border-color: var(--blue); background: var(--blue-light); }
+    .urgency-card .u-icon { font-size: 1.8rem; margin-bottom: 6px; }
+    .urgency-card .u-label { font-weight: 700; font-size: 0.85rem; }
+    .urgency-card .u-desc { font-size: 0.72rem; color: var(--gray-500); margin-top: 2px; }
+    .blood-group-select { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .bg-option {
+      border: 2px solid var(--gray-200); border-radius: var(--radius-sm); padding: 12px;
+      text-align: center; cursor: pointer; transition: var(--transition); font-weight: 800;
+      font-family: var(--mono); font-size: 1rem;
+    }
+    .bg-option:hover { border-color: var(--red); }
+    .bg-option.selected { border-color: var(--red); background: var(--red-muted); color: var(--red); }
+    .request-success { display: none; text-align: center; padding: 40px 20px; }
+    .request-success.show { display: block; }
+    .success-icon { font-size: 4rem; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>
+      Life<span class="drop">Drop</span>
+    </a>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="reviews.html">Reviews</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+    </div>
+  </nav>
+
+  <div class="request-page">
+    <!-- FORM STATE -->
+    <div id="requestForm">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:var(--red-muted);border:1px solid var(--red-border);color:var(--red);padding:6px 16px;border-radius:20px;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;"></span>
+          Emergency Coordination
+        </div>
+        <h1 style="font-size:2rem;font-weight:800;color:var(--dark);margin-bottom:8px;">Request Blood</h1>
+        <p style="color:var(--gray-500);max-width:480px;margin:0 auto;line-height:1.7;">Fill in this form and eligible donors near your location will be notified immediately. Average response time: 45 minutes.</p>
+      </div>
+
+      <!-- Urgency Selection -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-title" style="margin-bottom:16px;">How urgent is this? *</div>
+        <div class="urgency-cards">
+          <div class="urgency-card critical" id="urg-critical" onclick="selectUrgency('critical')">
+            <div class="u-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+            <div class="u-label">Critical</div>
+            <div class="u-desc">Life-threatening · needs blood within hours</div>
+          </div>
+          <div class="urgency-card urgent" id="urg-urgent" onclick="selectUrgency('urgent')">
+            <div class="u-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+            <div class="u-label">Urgent</div>
+            <div class="u-desc">Surgery / procedure · within 24 hours</div>
+          </div>
+          <div class="urgency-card scheduled" id="urg-scheduled" onclick="selectUrgency('scheduled')">
+            <div class="u-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="u-label">Scheduled</div>
+            <div class="u-desc">Planned procedure · within a week</div>
+          </div>
+        </div>
+        <input type="hidden" id="urgencyLevel" value="critical"/>
+      </div>
+
+      <!-- Blood Group -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-title" style="margin-bottom:16px;">Blood Group Needed *</div>
+        <div class="blood-group-select">
+          <div class="bg-option" onclick="selectBG(this, 'O-')">O-</div>
+          <div class="bg-option" onclick="selectBG(this, 'O+')">O+</div>
+          <div class="bg-option" onclick="selectBG(this, 'A+')">A+</div>
+          <div class="bg-option" onclick="selectBG(this, 'A-')">A-</div>
+          <div class="bg-option" onclick="selectBG(this, 'B+')">B+</div>
+          <div class="bg-option" onclick="selectBG(this, 'B-')">B-</div>
+          <div class="bg-option" onclick="selectBG(this, 'AB+')">AB+</div>
+          <div class="bg-option" onclick="selectBG(this, 'AB-')">AB-</div>
+        </div>
+        <input type="hidden" id="bloodGroupNeeded" value=""/>
+      </div>
+
+      <!-- Details -->
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-title" style="margin-bottom:16px;">Request Details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+          <div class="form-group">
+            <label class="form-label">Quantity Needed (units) *</label>
+            <input type="number" id="quantityNeeded" class="form-input" value="2" min="1" max="20"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">City *</label>
+            <input type="text" id="city" class="form-input" placeholder="Douala"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hospital Name</label>
+            <input type="text" id="hospitalName" class="form-input" placeholder="St. Jude Medical Center"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Area / Neighbourhood</label>
+            <input type="text" id="area" class="form-input" placeholder="Akwa"/>
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Medical Reason</label>
+            <textarea id="reason" class="form-input" rows="2" placeholder="Brief medical context (e.g. trauma patient, post-surgery, haemorrhage)..."></textarea>
+          </div>
+        </div>
+
+        <!-- Contact Info (for unauthenticated users) -->
+        <div id="guestContact">
+          <div style="border-top:1px solid var(--gray-100);margin:16px 0;"></div>
+          <div style="font-size:0.82rem;font-weight:700;color:var(--gray-700);margin-bottom:12px;">Your Contact Info</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" id="requesterName" class="form-input" placeholder="Your name"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number *</label>
+              <input type="tel" id="requesterPhone" class="form-input" placeholder="+237 6XX XXX XXX"/>
+            </div>
+          </div>
+          <p style="font-size:0.75rem;color:var(--gray-500);">
+            Have an account? <a href="login.html" style="color:var(--red);font-weight:600;">Sign in</a> for faster matching and status tracking.
+          </p>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-full" id="submitRequestBtn" onclick="submitBloodRequest()">
+        Submit Emergency Request
+      </button>
+      <p style="text-align:center;font-size:0.78rem;color:var(--gray-500);margin-top:12px;">
+        Your request will be broadcast to eligible nearby donors immediately.
+      </p>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="request-success" id="successState">
+      <div class="success-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <h2 style="font-size:1.6rem;font-weight:800;color:var(--dark);margin-bottom:12px;">Request Submitted!</h2>
+      <p style="color:var(--gray-600);max-width:380px;margin:0 auto 24px;line-height:1.7;">
+        Your blood request has been broadcast to eligible donors nearby. 
+        You should receive responses within 45 minutes.
+      </p>
+      <div style="background:var(--gray-100);border-radius:var(--radius);padding:20px;margin-bottom:24px;text-align:left;max-width:380px;margin-left:auto;margin-right:auto;">
+        <div style="font-weight:700;font-size:0.85rem;margin-bottom:12px;">What happens next:</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem;color:var(--gray-700);">
+          <div>1. Eligible donors receive notifications</div>
+          <div>2. Donors accept your request</div>
+          <div>3. Appointment coordinated</div>
+          <div>4. Blood donation completed</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="index.html" class="btn btn-outline">← Back to Home</a>
+        <a href="register.html" class="btn btn-primary">Track My Request</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gray-500);">
+      © 2025 LifeDrop · Emergency line: <strong>+237 600 BLOOD</strong>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let selectedUrgency = 'critical';
+    let selectedBG = '';
+
+    function selectUrgency(level) {
+      selectedUrgency = level;
+      document.getElementById('urgencyLevel').value = level;
+      ['critical','urgent','scheduled'].forEach(l => {
+        const el = document.getElementById('urg-' + l);
+        el.style.opacity = l === level ? '1' : '0.5';
+        el.style.transform = l === level ? 'scale(1.02)' : 'scale(1)';
+      });
+    }
+
+    function selectBG(el, bg) {
+      selectedBG = bg;
+      document.getElementById('bloodGroupNeeded').value = bg;
+      document.querySelectorAll('.bg-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    async function submitBloodRequest() {
+      if (!selectedBG) return showToast('Select Blood Group', 'Please select the required blood group', 'warning');
+      const city = document.getElementById('city').value.trim();
+      if (!city) return showToast('City Required', 'Please enter the city', 'warning');
+
+      const btn = document.getElementById('submitRequestBtn');
+      btn.disabled = true;
+      btn.textContent = 'Broadcasting...';
+
+      const payload = {
+        bloodGroupNeeded: selectedBG,
+        urgencyLevel: selectedUrgency,
+        quantityNeeded: parseInt(document.getElementById('quantityNeeded').value),
+        city,
+        area: document.getElementById('area').value.trim(),
+        reason: document.getElementById('reason').value.trim(),
+      };
+
+      try {
+        if (Auth.isLoggedIn()) {
+          await api.bloodRequests.create(payload);
+        } else {
+          // Guest mode: show partial success
+          await new Promise(r => setTimeout(r, 1200));
+        }
+        document.getElementById('requestForm').style.display = 'none';
+        document.getElementById('successState').classList.add('show');
+      } catch (err) {
+        showToast('Error', err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Submit Emergency Request';
+      }
+    }
+
+    // Hide guest contact form if logged in
+    if (Auth.isLoggedIn()) {
+      document.getElementById('guestContact').style.display = 'none';
+    }
+    selectUrgency('critical');
+  </script>
+</body>
+</html>

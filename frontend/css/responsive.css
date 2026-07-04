@@ -1,0 +1,283 @@
+/* LifeDrop Responsive Styles */
+
+/* ===== SMALL DESKTOP / LARGE TABLET (max 1200px) ===== */
+@media (max-width: 1200px) {
+  .hero-section { gap: 40px; padding: 60px 24px 48px; }
+  .hero-title { font-size: 2.8rem; }
+  .footer-grid { grid-template-columns: 1fr 1fr 1fr; gap: 28px; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+/* ===== TABLET LANDSCAPE (max 1024px) ===== */
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .inventory-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .dash-two-col { grid-template-columns: 1fr; }
+  .dash-three-col { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .footer-brand { grid-column: 1 / -1; }
+  .stories-grid { grid-template-columns: repeat(2, 1fr); }
+  .blood-cards-grid { grid-template-columns: repeat(4, 1fr); }
+  .hero-title { font-size: 2.5rem; }
+  .hero-section { gap: 40px; }
+  .settings-grid { grid-template-columns: 200px 1fr; }
+}
+
+/* ===== TABLET PORTRAIT (max 768px) ===== */
+@media (max-width: 768px) {
+  /* ---- CSS Variables ---- */
+  :root { --sidebar-w: 0px; }
+
+  /* ---- SIDEBAR ---- */
+  .sidebar { transform: translateX(-260px); width: 260px; }
+  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-md); }
+  .sidebar-toggle { display: flex; }
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 199;
+  }
+  .sidebar-overlay.open { display: block; }
+
+  /* ---- DASHBOARD LAYOUT ---- */
+  .dashboard-main { margin-left: 0; }
+  .dashboard-content { padding: 16px; }
+  .dashboard-topbar { padding: 0 16px; gap: 10px; }
+
+  /* ---- WELCOME CARD ---- */
+  .welcome-card { flex-direction: column; align-items: flex-start; }
+  .welcome-ring { display: none; }
+  .welcome-actions { flex-wrap: wrap; }
+
+  /* ---- GRIDS ---- */
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .inventory-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+  .role-grid { grid-template-columns: 1fr 1fr; }
+  .stories-grid { grid-template-columns: 1fr; }
+  .blood-cards-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+
+  /* ---- TABLES ---- */
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { font-size: 0.78rem; min-width: 480px; }
+  thead th, tbody td { padding: 8px 10px; }
+
+  /* ---- MODALS ---- */
+  .modal-overlay { align-items: flex-end; padding: 0; }
+  .modal {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-width: 100%;
+    width: 100%;
+    max-height: 85vh;
+    padding: 24px 20px;
+    margin: 0;
+  }
+
+  /* ---- PUBLIC NAVBAR ---- */
+  .navbar { padding: 0 16px; }
+  .navbar-links { display: none; }
+  .menu-toggle { display: flex !important; }
+  .navbar-actions { gap: 6px; }
+  .navbar-actions .btn-primary { display: none !important; }
+  /* Hide user chip text — too wide on mobile */
+  .navbar .user-chip span { display: none; }
+  .navbar .user-chip { padding: 3px; border-radius: 50%; }
+
+  /* ---- PUBLIC HERO (index.html inline class) ---- */
+  .hero-section { grid-template-columns: 1fr; gap: 28px; padding: 40px 20px; }
+  .hero-title { font-size: 2rem; }
+  .hero-visual { display: none; }
+  .hero-stats { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .hero-stat-num { font-size: 1.6rem; }
+
+  /* ---- LIVE INVENTORY ---- */
+  .live-inventory { padding: 40px 16px; }
+  .live-inventory-header { flex-direction: column; align-items: flex-start; }
+
+  /* ---- INSTITUTIONS ---- */
+  .institutions { padding: 40px 16px; }
+  .institution-logos { gap: 10px; }
+  .institution-logo { padding: 10px 18px; font-size: 0.78rem; }
+
+  /* ---- STORIES ---- */
+  .stories { padding: 40px 16px; }
+
+  /* ---- AUTH PAGES ---- */
+  .auth-card { padding: 28px 20px; }
+  .register-card { max-width: 100%; }
+  .auth-body { padding: 20px 16px; }
+
+  /* ---- SETTINGS ---- */
+  .settings-grid { grid-template-columns: 1fr; }
+  .settings-nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; }
+  .settings-nav-item { font-size: 0.8rem; padding: 7px 10px; }
+
+  /* ---- TOPBAR ELEMENTS ---- */
+  .topbar-search { display: none; }
+
+  /* ---- ALERT BAR ---- */
+  .alert-bar { font-size: 0.75rem; padding: 8px 16px; flex-wrap: wrap; gap: 6px; }
+
+  /* ---- CARDS & SECTIONS ---- */
+  .section-heading { font-size: 1.5rem; }
+  .dash-section-header { flex-wrap: wrap; gap: 8px; }
+
+  /* ---- EMERGENCY / REQUEST CARDS ---- */
+  .emergency-card { flex-wrap: wrap; }
+  .emergency-card-actions { flex-wrap: wrap; }
+
+  /* ---- FAB ---- */
+  .fab-emergency { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.8rem; }
+
+  /* ---- FOOTER ---- */
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+  footer { padding: 40px 20px 20px; }
+}
+
+/* ===== MOBILE (max 480px) ===== */
+@media (max-width: 480px) {
+  /* ---- PUBLIC NAVBAR (small phones) ---- */
+  .navbar { padding: 0 14px; }
+  .navbar .user-chip { display: none; }         /* avatar gone — hamburger covers account */
+  .navbar .icon-btn#notifBtn { display: none; } /* notif in mobile menu */
+  .navbar-actions { gap: 4px; }
+
+  /* ---- DASHBOARD TOPBAR ---- */
+  .topbar-title { display: none; }
+  .dashboard-topbar { gap: 6px; padding: 0 12px; }
+  .user-chip span[data-user-name] { display: none; }
+  .user-chip { padding: 4px 8px 4px 4px; }
+  .icon-btn { width: 34px; height: 34px; }
+
+  /* ---- GRIDS ---- */
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .inventory-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .blood-cards-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .role-grid { grid-template-columns: 1fr; }
+
+  /* ---- WELCOME CARD ---- */
+  .welcome-card { padding: 18px; }
+  .welcome-text h2 { font-size: 1.2rem; }
+  .welcome-actions { flex-direction: column; gap: 8px; }
+  .welcome-actions .btn { width: 100%; justify-content: center; }
+
+  /* ---- CARDS ---- */
+  .card { padding: 16px; }
+  .stat-card { padding: 14px; }
+  .stat-value { font-size: 1.5rem; }
+  .stat-label { font-size: 0.68rem; }
+
+  /* ---- SECTION TYPOGRAPHY ---- */
+  .section-heading { font-size: 1.3rem; }
+  .hero-title { font-size: 1.75rem; }
+  .hero-stat-num { font-size: 1.4rem; }
+  .hero-badge { font-size: 0.7rem; }
+  .hero-stats { gap: 10px; }
+
+  /* ---- AUTH ---- */
+  .auth-card { padding: 24px 16px; }
+  .auth-heading { font-size: 1.3rem; }
+
+  /* ---- EMERGENCY CARDS ---- */
+  .emergency-card { flex-direction: column; }
+  .emergency-card-actions { flex-direction: column; }
+  .emergency-card-actions .btn { width: 100%; justify-content: center; }
+  .bg-chip { align-self: flex-start; }
+
+  /* ---- TOAST ---- */
+  #toast-container { max-width: calc(100vw - 32px); left: 16px; right: 16px; bottom: 16px; }
+
+  /* ---- TICKER ---- */
+  .ticker-content { font-size: 0.72rem; }
+
+  /* ---- BUTTONS ---- */
+  .btn-lg { padding: 11px 22px; font-size: 0.875rem; }
+
+  /* ---- SIDEBAR ---- */
+  .sidebar { width: 240px; }
+
+  /* ---- MODAL ---- */
+  .modal { padding: 20px 16px; }
+
+  /* ---- DASHBOARD CONTENT ---- */
+  .dashboard-content { padding: 12px; }
+}
+
+/* ===== SMALL MOBILE (max 375px) ===== */
+@media (max-width: 375px) {
+  /* ---- GRIDS all go single col ---- */
+  .stats-grid { grid-template-columns: 1fr; }
+  .inventory-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .blood-cards-grid { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+
+  /* ---- TYPOGRAPHY ---- */
+  .hero-title { font-size: 1.5rem; }
+  .section-heading { font-size: 1.2rem; }
+  .welcome-text h2 { font-size: 1.05rem; }
+  .stat-value { font-size: 1.3rem; }
+
+  /* ---- TOPBAR ---- */
+  .topbar-actions { gap: 4px; }
+  .icon-btn { width: 30px; height: 30px; }
+  .avatar { width: 26px; height: 26px; font-size: 0.65rem; }
+
+  /* ---- SIDEBAR LOGO ---- */
+  .sidebar-logo .logo-text { font-size: 0.95rem; }
+
+  /* ---- LAYOUT ---- */
+  .dashboard-content { padding: 10px; }
+  .card { padding: 12px; }
+
+  /* ---- FOOTER ---- */
+  footer { padding: 32px 16px 16px; }
+}
+
+/* ===== MOBILE NAVBAR OVERLAY ===== */
+.mobile-nav-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 300;
+  padding: 20px;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+.mobile-nav-menu.open { display: flex; }
+.mobile-nav-close {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.mobile-nav-menu a {
+  padding: 14px 12px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--dark);
+  border-bottom: 1px solid var(--gray-100);
+  transition: var(--transition);
+}
+.mobile-nav-menu a:hover { background: var(--gray-100); }
+.mobile-nav-menu .btn {
+  margin-top: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+/* ===== PRINT ===== */
+@media print {
+  .sidebar, .dashboard-topbar, .fab-emergency, #toast-container, .alert-bar { display: none !important; }
+  .dashboard-main { margin-left: 0; }
+  .card { box-shadow: none; border: 1px solid #ddd; }
+}

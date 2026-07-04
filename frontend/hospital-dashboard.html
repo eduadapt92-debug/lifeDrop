@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hospital Dashboard — LifeDrop</title>
+  <script>try{if(localStorage.getItem('lifedrop_dark')==='true'){document.documentElement.style.background='#0A0A0C';}}catch(e){}</script>
+  <script>(function(){try{var t=localStorage.getItem('lifedrop_token'),u=JSON.parse(localStorage.getItem('lifedrop_user')||'null');if(!t||!u||!['hospital','bloodbank','admin'].includes(u.role))window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+  <div id="toast-container"></div>
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg>
+          <div class="logo-text">Life<span class="drop">Drop</span></div>
+        </div>
+        <div class="sidebar-portal-badge">Hospital Portal</div>
+        <div class="sidebar-hospital-name" style="font-size:0.72rem;color:var(--gray-400);margin-top:4px;" data-hospital-name>St. Jude Medical Center</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="sidebar-link active" data-page="overview">
+          <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span> Inventory
+        </a>
+        <a class="sidebar-link" data-page="emergency">
+          <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span> Emergency Ops
+        </a>
+        <a class="sidebar-link" data-page="donors">
+          <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Donor Match
+        </a>
+        <a class="sidebar-link" data-page="staff">
+          <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Staff
+        </a>
+        <div class="sidebar-section-label" style="margin-top:8px;">Reports</div>
+        <a class="sidebar-link" data-page="analytics">
+          <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Analytics
+        </a>
+        <a class="sidebar-link" data-page="notifications">
+          <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span> Notifications
+          <span class="link-badge" id="sidebarNotifBadge" style="display:none;">0</span>
+        </a>
+        <a class="sidebar-link" href="settings.html">
+          <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Settings
+        </a>
+      </nav>
+
+      <button class="sidebar-emergency-btn" onclick="openModal('emergencyModal')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Log Emergency
+      </button>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user-card">
+          <div class="avatar" style="width:36px;height:36px;background:var(--blue);" data-user-avatar>SC</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" data-user-name>Dr. Sarah Chen</div>
+            <div class="sidebar-user-role">Chief Coordinator</div>
+          </div>
+        </div>
+        <div class="sidebar-help">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Help Center
+        </div>
+        <div class="sidebar-logout" data-logout>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+      <!-- ALERT BAR -->
+      <div class="alert-bar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="flex-shrink:0"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <strong>CRITICAL ALERT:</strong>&nbsp; O- NEGATIVE SUPPLY AT 12% IN SECTOR 4
+        <button class="btn btn-sm" onclick="openModal('emergencyModal')" style="margin-left:auto;background:white;color:var(--red);border:none;font-weight:700;letter-spacing:0.04em;">DEPLOY COORDINATION</button>
+      </div>
+
+      <!-- TOPBAR -->
+      <div class="dashboard-topbar">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="topbar-title">Hospital Operations</div>
+        <div class="topbar-search">
+          <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input type="text" placeholder="Search donors, blood units, or staff..."/>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn dark-toggle" title="Toggle dark mode"></button>
+          <button class="icon-btn" onclick="openModal('notifDrawer')" title="Notifications">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge" id="notifBadge" style="display:none">0</span>
+          </button>
+          <div class="user-chip">
+            <div class="avatar" style="background:var(--blue);" data-user-avatar>SC</div>
+            <span data-user-name>Dr. Sarah Chen</span>
+            <span style="font-size:0.65rem;color:var(--gray-400);display:block;line-height:1;">Chief Coordinator</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD CONTENT -->
+      <div class="dashboard-content">
+
+        <!-- OVERVIEW PAGE -->
+        <div class="dash-page active" id="page-overview">
+          <!-- Inventory Overview Card -->
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header">
+              <div class="card-title">Real-time Blood Inventory</div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span class="badge badge-red badge-live">Live</span>
+                <button class="btn btn-ghost btn-sm" onclick="loadInventory()">↻ Refresh</button>
+                <button class="btn btn-primary btn-sm" onclick="openUpdateInventory('','','')">+ Update</button>
+              </div>
+            </div>
+            <div class="inventory-grid" id="inventoryCards">
+              <!-- Rendered by JS -->
+              <div style="grid-column:1/-1;text-align:center;padding:24px;">
+                <div class="spinner" style="margin:0 auto;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two column: Emergency + Donors -->
+          <div class="dash-three-col">
+            <div>
+              <!-- Emergency Ops Panel -->
+              <div class="card" style="margin-bottom:20px;">
+                <div class="card-header">
+                  <div class="card-title">Emergency Operations</div>
+                  <button class="btn btn-primary btn-sm" onclick="openModal('emergencyModal')">+ Log Emergency</button>
+                </div>
+                <div id="bloodRequestsPanel">
+                  <div style="text-align:center;padding:24px;"><div class="spinner" style="margin:0 auto;"></div></div>
+                </div>
+              </div>
+
+              <!-- Usage Trends -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Usage Trends</div>
+                  <span style="font-size:0.75rem;color:var(--gray-500);">This Week</span>
+                </div>
+                <div id="usageGraph"></div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;">
+                  <div style="text-align:center;">
+                    <div style="font-size:1.2rem;font-weight:800;color:var(--dark);">148</div>
+                    <div style="font-size:0.7rem;color:var(--gray-500);">Units Used</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.2rem;font-weight:800;color:var(--green);">83%</div>
+                    <div style="font-size:0.7rem;color:var(--gray-500);">Donation Rate</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:1.2rem;font-weight:800;color:var(--orange);">4.2%</div>
+                    <div style="font-size:0.7rem;color:var(--gray-500);">Waste Factor</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right column: Donors -->
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Nearby Donors</div>
+                  <button class="btn btn-ghost btn-sm" onclick="loadMatchedDonors()">↻ Refresh</button>
+                </div>
+                <div id="nearbyDonors">
+                  <div style="text-align:center;padding:24px;"><div class="spinner" style="margin:0 auto;"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Staff Coordination Table -->
+          <div class="card" style="margin-top:20px;">
+            <div class="card-header">
+              <div class="card-title">Recent Staff Coordination</div>
+              <a class="dash-section-link" data-page="staff" onclick="document.querySelector('.sidebar-link[data-page=staff]').click()">View All</a>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Staff Member</th>
+                    <th>Action</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="staffTableBody">
+                  <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--gray-500);">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- INVENTORY PAGE -->
+        <div class="dash-page" id="page-inventory">
+          <div class="card" style="margin-bottom:20px;">
+            <div class="card-header">
+              <div class="card-title">Full Blood Inventory</div>
+              <button class="btn btn-primary btn-sm" onclick="openUpdateInventory('','','')">+ Add / Update</button>
+            </div>
+            <div id="inventoryBars" style="padding:8px 0;">
+              <div style="text-align:center;padding:24px;"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+          </div>
+          <div class="inventory-grid" id="inventoryCards2">
+            <!-- Inventory cards rendered by JS (shared render fn) -->
+          </div>
+        </div>
+
+        <!-- EMERGENCY OPS PAGE -->
+        <div class="dash-page" id="page-emergency">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Emergency Operations</div>
+              <button class="btn btn-primary btn-sm" onclick="openModal('emergencyModal')">+ Log Emergency</button>
+            </div>
+            <div id="emergencyOpsList">
+              <div style="text-align:center;padding:24px;"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DONOR MATCH PAGE -->
+        <div class="dash-page" id="page-donors">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Donor Match</div>
+              <div style="display:flex;gap:8px;">
+                <select id="donorMatchBG" class="form-input" style="width:auto;padding:6px 10px;" onchange="loadMatchedDonors()">
+                  <option value="">All Blood Groups</option>
+                  <option>O-</option><option>O+</option><option>A+</option><option>A-</option>
+                  <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+                </select>
+                <button class="btn btn-ghost btn-sm" onclick="loadMatchedDonors()">↻ Refresh</button>
+              </div>
+            </div>
+            <div id="nearbyDonors2">
+              <div style="text-align:center;padding:24px;"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STAFF PAGE -->
+        <div class="dash-page" id="page-staff">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Staff Coordination</div>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr><th>Staff Member</th><th>Role</th><th>Action</th><th>Time</th><th>Status</th></tr>
+                </thead>
+                <tbody id="staffTableBody2"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS PAGE -->
+        <div class="dash-page" id="page-analytics">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px;">
+            <div class="stat-card red"><div class="stat-label">Total Requests</div><div class="stat-value">48</div></div>
+            <div class="stat-card green"><div class="stat-label">Fulfilled</div><div class="stat-value">41</div></div>
+            <div class="stat-card blue"><div class="stat-label">Avg Response</div><div class="stat-value">2.3h</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Weekly Usage Trends</div></div>
+            <div id="analyticsGraph" style="margin-top:12px;"></div>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS PAGE -->
+        <div class="dash-page" id="page-notifications">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Notifications</div>
+              <button class="btn btn-ghost btn-sm" onclick="markAllRead()">Mark all read</button>
+            </div>
+            <div id="notifList">
+              <div style="text-align:center;padding:24px;"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end dashboard-content -->
+
+      <footer style="background:white;border-top:1px solid var(--gray-200);padding:16px 28px;display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:var(--gray-500);">
+        <span>© 2025 LifeDrop · Hospital Operations Portal</span>
+        <span data-hospital-name>Hospital</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- INVENTORY MODAL -->
+  <div class="modal-overlay" id="inventoryModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Update Blood Inventory</div>
+        <button class="modal-close">✕</button>
+      </div>
+      <form id="inventoryForm">
+        <input type="hidden" id="invId" name="invId"/>
+        <div class="form-group">
+          <label class="form-label">Blood Group</label>
+          <select id="invBloodGroup" name="invBloodGroup" class="form-input" required>
+            <option value="">Select blood group</option>
+            <option>O-</option><option>O+</option><option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Available Units</label>
+          <input type="number" id="invUnits" name="invUnits" class="form-input" min="0" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Used Units</label>
+          <input type="number" name="usedUnits" class="form-input" min="0" value="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Expiry Date</label>
+          <input type="date" name="expiryDate" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Storage Location</label>
+          <input type="text" name="storageLocation" class="form-input" placeholder="e.g. Blood Bank Unit A"/>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Save Inventory</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- EMERGENCY MODAL -->
+  <div class="modal-overlay" id="emergencyModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Log Emergency Blood Request</div>
+        <button class="modal-close">✕</button>
+      </div>
+      <form id="emergencyForm">
+        <div class="form-group">
+          <label class="form-label">Blood Group Needed</label>
+          <select name="bloodGroupNeeded" class="form-input" required>
+            <option value="">Select blood group</option>
+            <option>O-</option><option>O+</option><option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quantity Needed (units)</label>
+          <input type="number" name="quantityNeeded" class="form-input" min="1" value="2" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Urgency Level</label>
+          <select name="urgencyLevel" class="form-input">
+            <option value="critical">Critical</option>
+            <option value="urgent">Urgent</option>
+            <option value="scheduled">Scheduled</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input type="text" name="city" class="form-input" placeholder="Douala"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reason / Medical Note</label>
+          <textarea name="reason" class="form-input" rows="2" placeholder="e.g. Trauma patient, urgent surgery required"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" style="background:var(--red);">Log Emergency Request</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION DRAWER -->
+  <div class="modal-overlay" id="notifDrawer">
+    <div class="modal" style="max-width:400px;">
+      <div class="modal-header">
+        <div class="modal-title">Notifications</div>
+        <button class="modal-close">✕</button>
+      </div>
+      <div id="notifListDrawer"></div>
+    </div>
+  </div>
+
+  <style>
+    .notif-item{display:flex;gap:12px;padding:12px;border-bottom:1px solid var(--gray-100);cursor:pointer;transition:var(--transition);}
+    .notif-item:hover{background:var(--gray-100);}
+    .notif-item.unread{background:var(--red-muted);}
+    .notif-icon{font-size:1.3rem;flex-shrink:0;}
+    .notif-title{font-weight:700;font-size:0.85rem;}
+    .notif-msg{font-size:0.78rem;color:var(--gray-600);margin-top:2px;line-height:1.4;}
+    .notif-time{font-size:0.7rem;color:var(--gray-400);margin-top:4px;}
+  </style>
+
+  <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/hospital.js"></script>
+</body>
+</html>

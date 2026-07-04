@@ -1,0 +1,167 @@
+/* LifeDrop Auth Styles */
+.auth-page {
+  min-height: 100vh;
+  background: var(--gray-100);
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: white;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.auth-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(139, 92, 246, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 50%, rgba(196, 30, 58, 0.07) 0%, transparent 55%),
+    var(--gray-100);
+}
+
+.auth-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+}
+
+.auth-logo-center {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.auth-heading { font-size: 1.6rem; font-weight: 800; color: var(--dark); letter-spacing: -0.03em; text-align: center; }
+.auth-sub { text-align: center; color: var(--gray-500); font-size: 0.875rem; margin-top: 6px; margin-bottom: 28px; line-height: 1.6; }
+
+.input-wrap { position: relative; }
+.input-icon { display: none; }
+.input-wrap .form-input { padding-left: 13px; }
+.toggle-password {
+  position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+  cursor: pointer; color: var(--gray-400); background: none; border: none;
+  display: flex; align-items: center; justify-content: center; padding: 4px;
+  border-radius: 4px; transition: var(--transition);
+}
+.toggle-password:hover { color: var(--dark); background: var(--gray-100); }
+
+.form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.remember-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--gray-700); }
+.remember-row input[type=checkbox] { accent-color: var(--red); width: 15px; height: 15px; }
+.forgot-link { font-size: 0.85rem; color: var(--red); font-weight: 600; }
+.forgot-link:hover { text-decoration: underline; }
+
+.divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--gray-400); font-size: 0.78rem; letter-spacing: 0.06em; font-weight: 600; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
+
+.btn-google {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 11px; border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm); background: white; font-size: 0.875rem;
+  font-weight: 600; cursor: pointer; transition: var(--transition); color: var(--dark);
+}
+.btn-google:hover { background: var(--gray-100); border-color: var(--gray-300); }
+.btn-google img { width: 18px; height: 18px; }
+
+.auth-switch { text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--gray-500); }
+.auth-switch a { color: var(--red); font-weight: 700; }
+.auth-switch a:hover { text-decoration: underline; }
+
+.auth-footer { text-align: center; padding: 20px; font-size: 0.78rem; color: var(--gray-400); }
+
+/* Register Role Cards */
+.role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.role-card {
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background: white;
+}
+.role-card:hover { border-color: var(--red); background: var(--red-muted); }
+.role-card.selected { border-color: var(--red); background: var(--red-muted); }
+.role-card .role-icon { font-size: 2rem; margin-bottom: 10px; }
+.role-card .role-name { font-weight: 700; font-size: 0.9rem; color: var(--dark); }
+.role-card .role-desc { font-size: 0.75rem; color: var(--gray-500); margin-top: 4px; }
+
+/* Register large card */
+.register-card {
+  max-width: 680px;
+}
+
+.register-step { display: none; }
+.register-step.active { display: block; }
+
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+
+.terms-row { display: flex; align-items: flex-start; gap: 10px; margin-top: 8px; font-size: 0.82rem; color: var(--gray-700); }
+.terms-row input[type=checkbox] { accent-color: var(--red); margin-top: 2px; width: 14px; height: 14px; flex-shrink: 0; }
+.terms-row a { color: var(--red); font-weight: 600; }
+
+.step-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; }
+.step-back { background: none; border: none; color: var(--red); font-weight: 600; font-size: 0.875rem; cursor: pointer; }
+.step-back:hover { text-decoration: underline; }
+
+.upload-zone {
+  border: 2px dashed var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--gray-500);
+  font-size: 0.85rem;
+}
+.upload-zone:hover { border-color: var(--red); color: var(--red); background: var(--red-muted); }
+.upload-zone .upload-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.upload-zone input { display: none; }
+
+/* ===== DARK MODE AUTH ===== */
+body.dark .auth-page { background: #0A0A0C; }
+body.dark .auth-body {
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(139, 92, 246, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 50%, rgba(196, 30, 58, 0.05) 0%, transparent 55%),
+    #0A0A0C;
+}
+body.dark .auth-navbar { background: #161618; border-color: #2A2A2E; }
+body.dark .auth-card { background: #161618; border-color: #2A2A2E; box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+body.dark .auth-heading { color: #F9FAFB; }
+body.dark .auth-sub { color: #9CA3AF; }
+body.dark .auth-footer { color: #6B7280; }
+body.dark .auth-switch { color: #9CA3AF; }
+body.dark .auth-switch a { color: var(--red); }
+body.dark .divider { color: #4B5563; }
+body.dark .divider::before, body.dark .divider::after { background: #2A2A2E; }
+body.dark .btn-google { background: #1E1E22; border-color: #2A2A2E; color: #E5E7EB; }
+body.dark .btn-google:hover { background: #2A2A2E; border-color: #3A3A3E; }
+body.dark .remember-row { color: #9CA3AF; }
+body.dark .forgot-link { color: var(--red); }
+body.dark .toggle-password { color: #9CA3AF; }
+body.dark .toggle-password:hover { color: #E5E7EB; background: #2A2A2E; }
+body.dark .upload-zone { border-color: #2A2A2E; color: #9CA3AF; }
+body.dark .upload-zone:hover { border-color: var(--red); color: var(--red); background: var(--red-muted); }
+body.dark .role-card { background: #1E1E22; border-color: #2A2A2E; }
+body.dark .role-card:hover, body.dark .role-card.selected { border-color: var(--red); background: var(--red-muted); }
+body.dark .role-card .role-name { color: #F9FAFB; }
+body.dark .role-card .role-desc { color: #9CA3AF; }

@@ -1,0 +1,339 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Join LifeDrop — Register</title>
+  <script>try{if(localStorage.getItem('lifedrop_dark')==='true'){document.documentElement.style.background='#0A0A0C';}}catch(e){}</script>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/auth.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+  <div id="toast-container"></div>
+  <div class="auth-page" id="registerPage">
+
+    <div class="auth-navbar">
+      <a href="index.html" class="navbar-brand">
+        <svg width="20" height="20" viewBox="0 0 100 100" fill="var(--red)" style="flex-shrink:0"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg>
+        Life<span class="drop">Drop</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="icon-btn dark-toggle" title="Toggle dark mode"></button>
+        <a href="login.html" class="btn btn-ghost btn-sm">Sign In</a>
+      </div>
+    </div>
+
+    <div class="auth-body" style="align-items:flex-start;padding-top:30px;">
+
+      <!-- STEP 1: Role Selection -->
+      <div class="auth-card register-step active" id="step1" style="max-width:520px;">
+        <h1 class="auth-heading">Join LifeDrop</h1>
+        <p class="auth-sub">Select how you want to participate in saving lives.</p>
+        <div class="role-grid">
+          <div class="role-card" data-role="donor">
+            <div class="role-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg></div>
+            <div class="role-name">Donor</div>
+            <div class="role-desc">Give blood and save lives</div>
+          </div>
+          <div class="role-card" data-role="recipient">
+            <div class="role-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M9 21v-4h6v4"/><path d="M12 7v6"/><path d="M9 10h6"/></svg></div>
+            <div class="role-name">Recipient</div>
+            <div class="role-desc">Request blood urgently</div>
+          </div>
+          <div class="role-card" data-role="hospital">
+            <div class="role-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M9 21v-4h6v4"/><path d="M12 7v6"/><path d="M9 10h6"/></svg></div>
+            <div class="role-name">Hospital</div>
+            <div class="role-desc">Manage blood inventory</div>
+          </div>
+          <div class="role-card" data-role="bloodbank">
+            <div class="role-icon"><svg width="36" height="36" viewBox="0 0 100 100" fill="var(--red)" opacity="0.85"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>
+            <div class="role-name">Blood Bank</div>
+            <div class="role-desc">Coordinate blood supply</div>
+          </div>
+        </div>
+        <button id="step1Next" class="btn btn-primary btn-full" style="margin-top:24px;">Continue →</button>
+        <div class="auth-switch" style="margin-top:16px;">Already have an account? <a href="login.html">Sign in</a></div>
+      </div>
+
+      <!-- STEP 2: Registration Form -->
+      <div class="auth-card register-card register-step" id="step2">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+          <button type="button" class="step-back">← Back</button>
+          <h2 class="auth-heading" id="formHeading" style="font-size:1.3rem;">Create Account</h2>
+        </div>
+
+        <form id="registerForm" novalidate>
+
+          <!-- DONOR FORM -->
+          <div class="role-form" id="form-donor" style="display:none;">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" class="form-input" placeholder="Sarah Jenkins" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-input" placeholder="sarah@email.com" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" name="phone" class="form-input" placeholder="+237 6XX XXX XXX"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select name="gender" class="form-input">
+                  <option value="">Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <input type="date" name="dateOfBirth" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Blood Group</label>
+                <select name="bloodGroup" class="form-input" required>
+                  <option value="">Select blood group</option>
+                  <option>A+</option><option>A-</option>
+                  <option>B+</option><option>B-</option>
+                  <option>AB+</option><option>AB-</option>
+                  <option>O+</option><option>O-</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-input" placeholder="Douala"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Area / Neighbourhood</label>
+                <input type="text" name="area" class="form-input" placeholder="Akwa"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Weight (kg)</label>
+                <input type="number" name="weight" class="form-input" placeholder="65" min="50"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Donation Date</label>
+                <input type="date" name="lastDonationDate" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Health Status</label>
+                <select name="healthStatus" class="form-input">
+                  <option value="healthy">Healthy</option>
+                  <option value="under_treatment">Under Treatment</option>
+                  <option value="temporary_deferral">Temporary Deferral</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-input" placeholder="Min 6 characters" required/>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="confirmPassword" class="form-input" placeholder="Repeat password" required/>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:8px;">
+              <label class="form-label">Health Document (Optional)</label>
+              <div class="upload-zone">
+                <div class="upload-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+                <div class="upload-label">Click to upload or drag &amp; drop</div>
+                <div style="font-size:0.72rem;color:var(--gray-400);margin-top:4px;">PDF, JPG, PNG, DOC up to 10MB</div>
+                <input type="file" name="healthDoc" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECIPIENT FORM -->
+          <div class="role-form" id="form-recipient" style="display:none;">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" class="form-input" placeholder="Your full name" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-input" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" name="phone" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Required Blood Group</label>
+                <select name="requiredBloodGroup" class="form-input">
+                  <option value="">Select</option>
+                  <option>A+</option><option>A-</option>
+                  <option>B+</option><option>B-</option>
+                  <option>AB+</option><option>AB-</option>
+                  <option>O+</option><option>O-</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Area</label>
+                <input type="text" name="area" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hospital Name</label>
+                <input type="text" name="hospitalName" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Urgency Level</label>
+                <select name="urgencyLevel" class="form-input">
+                  <option value="critical">Critical</option>
+                  <option value="urgent" selected>Urgent</option>
+                  <option value="scheduled">Scheduled</option>
+                </select>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label">Medical Note</label>
+                <textarea name="medicalNote" class="form-input" rows="2" placeholder="Brief medical context..."></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-input" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="confirmPassword" class="form-input" required/>
+              </div>
+            </div>
+          </div>
+
+          <!-- HOSPITAL FORM -->
+          <div class="role-form" id="form-hospital" style="display:none;">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Hospital Name</label>
+                <input type="text" name="name" class="form-input" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Institution Type</label>
+                <select name="institutionType" class="form-input">
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
+                  <option value="ngo">NGO / Mission</option>
+                  <option value="clinic">Clinic</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Official Email</label>
+                <input type="email" name="email" class="form-input" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" name="phone" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Area</label>
+                <input type="text" name="area" class="form-input"/>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label">Address</label>
+                <input type="text" name="address" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Registration Number</label>
+                <input type="text" name="registrationNumber" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Emergency Contact</label>
+                <input type="tel" name="emergencyContact" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-input" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="confirmPassword" class="form-input" required/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Authorization Document</label>
+              <div class="upload-zone">
+                <div class="upload-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+                <div class="upload-label">Upload Authorization · PDF, JPG up to 10MB</div>
+                <input type="file" name="authDoc" accept=".pdf,.jpg,.jpeg,.png"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOOD BANK FORM -->
+          <div class="role-form" id="form-bloodbank" style="display:none;">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Blood Bank Name</label>
+                <input type="text" name="name" class="form-input" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-input" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" name="phone" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-input"/>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label">Address</label>
+                <input type="text" name="address" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Registration Number</label>
+                <input type="text" name="registrationNumber" class="form-input"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-input" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="confirmPassword" class="form-input" required/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Authorization Document</label>
+              <div class="upload-zone">
+                <div class="upload-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+                <div class="upload-label">Upload Authorization Document</div>
+                <input type="file" name="authDoc" accept=".pdf,.jpg,.jpeg,.png"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- TERMS -->
+          <div class="terms-row" style="margin-top:16px;">
+            <input type="checkbox" name="acceptTerms" id="acceptTerms"/>
+            <label for="acceptTerms">I accept the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I confirm all submitted information is accurate.</label>
+          </div>
+
+          <div class="step-nav" style="margin-top:20px;">
+            <button type="button" class="step-back">← Back</button>
+            <button type="submit" class="btn btn-primary btn-lg">Create Account →</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

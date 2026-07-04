@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recipient Dashboard — LifeDrop</title>
+  <script>try{if(localStorage.getItem('lifedrop_dark')==='true'){document.documentElement.style.background='#0A0A0C';}}catch(e){}</script>
+  <script>(function(){try{var t=localStorage.getItem('lifedrop_token'),u=JSON.parse(localStorage.getItem('lifedrop_user')||'null');if(!t||!u||u.role!=='recipient')window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+  <div id="toast-container"></div>
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>
+          <div class="logo-text">Life<span class="drop">Drop</span></div>
+        </div>
+        <div class="sidebar-portal-badge" style="color:var(--blue);background:var(--blue-light);border-color:rgba(29,78,216,0.2);">Recipient Portal</div>
+        <div class="sidebar-hospital-name" data-user-name>Loading...</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link active" data-page="overview"><span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Overview</a>
+        <a class="sidebar-link" data-page="requests"><span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-5.5 8-8 12-8 15a8 8 0 0 0 16 0c0-3-2.5-7-8-15z"/></svg></span> My Requests</a>
+        <a class="sidebar-link" data-page="notifications"><span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span> Notifications<span class="link-badge" id="sidebarNotifBadge" style="display:none;">0</span></a>
+        <a class="sidebar-link" href="settings.html"><span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user-card">
+          <div class="avatar" style="width:36px;height:36px;background:var(--blue);" data-user-avatar>R</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" data-user-name>Recipient</div>
+            <div class="sidebar-user-role">Recipient</div>
+          </div>
+        </div>
+        <div class="sidebar-logout" data-logout><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</div>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <div class="alert-bar">
+        <div class="alert-bar-pulse"></div>
+        <strong>Tip:</strong> Create an emergency blood request and matching donors will be notified instantly.
+      </div>
+      <div class="dashboard-topbar">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="topbar-title">Recipient Dashboard</div>
+        <div class="topbar-actions">
+          <button class="icon-btn dark-toggle" title="Toggle dark mode"></button>
+          <button class="icon-btn" onclick="openModal('notifDrawer')" title="Notifications">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge" id="notifBadge" style="display:none">0</span>
+          </button>
+          <div class="user-chip"><div class="avatar" style="background:var(--blue);" data-user-avatar>R</div><span data-user-name>User</span></div>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+        <!-- OVERVIEW -->
+        <div class="dash-page active" id="page-overview">
+          <div class="welcome-card">
+            <div class="welcome-text">
+              <h2>Hello, <span class="name" data-user-name>Recipient</span>!</h2>
+              <p>Manage your blood requests and track donor responses in real time.</p>
+              <div class="welcome-actions">
+                <button class="btn btn-primary" onclick="openModal('requestModal')">New Blood Request</button>
+                <button class="btn btn-ghost" onclick="loadMyRequests()">Refresh Status</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-grid" style="margin-top:24px;">
+            <div class="stat-card blue">
+              <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
+              <div class="stat-label">Blood Group</div>
+              <div class="stat-value" style="font-size:1.4rem;font-family:var(--mono);" data-blood-group>—</div>
+            </div>
+            <div class="stat-card orange">
+              <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+              <div class="stat-label">Urgency</div>
+              <div class="stat-value" style="font-size:1.2rem;text-transform:capitalize;" data-urgency>—</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M9 21v-4h6v4"/><path d="M12 7v6"/><path d="M9 10h6"/></svg></div>
+              <div class="stat-label">Hospital</div>
+              <div class="stat-value" style="font-size:0.9rem;" data-hospital-name>—</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-5.5 8-8 12-8 15a8 8 0 0 0 16 0c0-3-2.5-7-8-15z"/></svg></div>
+              <div class="stat-label">Active Requests</div>
+              <div class="stat-value" id="activeRequestCount">—</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:24px;">
+            <div class="card-header">
+              <div class="card-title">My Blood Requests</div>
+              <button class="btn btn-primary btn-sm" onclick="openModal('requestModal')">+ New Request</button>
+            </div>
+            <div id="myRequests">
+              <div style="text-align:center;padding:24px;"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REQUESTS PAGE -->
+        <div class="dash-page" id="page-requests">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">All Blood Requests</div>
+              <button class="btn btn-primary btn-sm" onclick="openModal('requestModal')">+ New Request</button>
+            </div>
+            <div id="myRequests2">
+              <div style="text-align:center;padding:24px;"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS PAGE -->
+        <div class="dash-page" id="page-notifications">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Notifications</div>
+              <button class="btn btn-ghost btn-sm" onclick="markAllRead()">Mark all read</button>
+            </div>
+            <div id="notifList"></div>
+          </div>
+        </div>
+      </div>
+
+      <footer style="background:white;border-top:1px solid var(--gray-200);padding:16px 28px;font-size:0.78rem;color:var(--gray-500);display:flex;justify-content:space-between;">
+        <span>© 2025 LifeDrop</span><span>Recipient Portal</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- BLOOD REQUEST MODAL -->
+  <div class="modal-overlay" id="requestModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Create Blood Request</div>
+        <button class="modal-close">✕</button>
+      </div>
+      <form id="bloodRequestForm">
+        <div class="form-group">
+          <label class="form-label">Blood Group Needed</label>
+          <select name="bloodGroupNeeded" class="form-input" required>
+            <option value="">Select</option>
+            <option>O-</option><option>O+</option><option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quantity (units)</label>
+          <input type="number" name="quantityNeeded" class="form-input" min="1" value="1" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Urgency Level</label>
+          <select name="urgencyLevel" class="form-input">
+            <option value="critical">Critical</option>
+            <option value="urgent" selected>Urgent</option>
+            <option value="scheduled">Scheduled</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input type="text" name="city" class="form-input" placeholder="Douala" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Area</label>
+          <input type="text" name="area" class="form-input" placeholder="Akwa"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reason</label>
+          <textarea name="reason" class="form-input" rows="2" placeholder="Brief medical reason..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Submit Request</button>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .notif-item{display:flex;gap:12px;padding:12px;border-bottom:1px solid var(--gray-100);cursor:pointer;}
+    .notif-item.unread{background:var(--blue-light);}
+    .notif-icon{font-size:1.3rem;flex-shrink:0;}
+    .notif-title{font-weight:700;font-size:0.85rem;}
+    .notif-msg{font-size:0.78rem;color:var(--gray-600);margin-top:2px;}
+    .notif-time{font-size:0.7rem;color:var(--gray-400);margin-top:4px;}
+  </style>
+
+  <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/recipient.js"></script>
+</body>
+</html>

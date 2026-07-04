@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us — LifeDrop</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <style>
+    .contact-page { max-width: 1000px; margin: 0 auto; padding: 60px 24px; display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; }
+    .contact-info h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; }
+    .contact-info p { color: var(--gray-600); line-height: 1.7; margin-bottom: 28px; }
+    .contact-item { display: flex; gap: 14px; margin-bottom: 20px; }
+    .contact-item-icon { width: 44px; height: 44px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; background: var(--red-muted); border: 1px solid var(--red-border); flex-shrink: 0; }
+    .contact-item-label { font-weight: 700; font-size: 0.85rem; color: var(--dark); }
+    .contact-item-value { font-size: 0.82rem; color: var(--gray-600); margin-top: 2px; }
+    .contact-emergency { background: var(--red); color: white; border-radius: var(--radius); padding: 20px; margin-top: 24px; }
+    .contact-emergency h3 { font-weight: 800; margin-bottom: 6px; }
+    .contact-emergency p { color: rgba(255,255,255,0.85); font-size: 0.85rem; }
+    .contact-emergency .phone { font-size: 1.4rem; font-weight: 800; font-family: var(--mono); margin-top: 8px; }
+    @media(max-width:768px) { .contact-page { grid-template-columns: 1fr; gap: 32px; padding: 40px 16px; } }
+  </style>
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand"><div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>Life<span class="drop">Drop</span></a>
+    <div class="navbar-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="reviews.html">Reviews</a><a href="contact.html" class="active">Contact</a></div>
+    <div class="navbar-actions"><a href="register.html" class="btn btn-primary btn-sm">Join</a></div>
+  </nav>
+
+  <div style="background:linear-gradient(135deg,var(--dark),var(--gray-900));color:white;padding:48px 32px;text-align:center;">
+    <h1 style="font-size:2rem;font-weight:800;margin-bottom:8px;">Contact LifeDrop</h1>
+    <p style="color:rgba(255,255,255,0.7);">We're here to help — whether it's a question, partnership, or emergency.</p>
+  </div>
+
+  <div class="contact-page">
+    <!-- INFO -->
+    <div class="contact-info">
+      <h2>Get in Touch</h2>
+      <p>Our team is available to answer your questions, handle partnership inquiries, and support hospital onboarding.</p>
+
+      <div class="contact-item">
+        <div class="contact-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+        <div>
+          <div class="contact-item-label">General Inquiries</div>
+          <div class="contact-item-value"><a href="mailto:hello@lifedrop.cm" style="color:var(--red);">hello@lifedrop.cm</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div>
+          <div class="contact-item-label">Hospital Partnerships</div>
+          <div class="contact-item-value"><a href="mailto:hospitals@lifedrop.cm" style="color:var(--red);">hospitals@lifedrop.cm</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+        <div>
+          <div class="contact-item-label">Technical / API Support</div>
+          <div class="contact-item-value"><a href="mailto:api@lifedrop.cm" style="color:var(--red);">api@lifedrop.cm</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div>
+          <div class="contact-item-label">Head Office</div>
+          <div class="contact-item-value">Akwa Business District, Douala, Cameroon</div>
+        </div>
+      </div>
+
+      <div class="contact-emergency">
+        <h3>Blood Emergency?</h3>
+        <p>Don't contact us — submit an emergency request directly. Donors are notified instantly.</p>
+        <div class="phone">+237 600 BLOOD</div>
+        <a href="blood-request.html" class="btn btn-sm" style="background:rgba(255,255,255,0.2);color:white;border-color:rgba(255,255,255,0.3);margin-top:12px;display:inline-flex;">Request Blood →</a>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:20px;">Send Us a Message</div>
+      <form id="contactForm" onsubmit="handleContact(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" name="name" class="form-input" placeholder="Your full name" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input type="email" name="email" class="form-input" placeholder="you@example.com" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Organization (Optional)</label>
+          <input type="text" name="organization" class="form-input" placeholder="Hospital, NGO, or company name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject *</label>
+          <select name="subject" class="form-input" required>
+            <option value="">Select a topic</option>
+            <option>Hospital Partnership Inquiry</option>
+            <option>Technical / API Support</option>
+            <option>Donor Registration Help</option>
+            <option>Blood Request Assistance</option>
+            <option>Feedback / Suggestion</option>
+            <option>Media / Press</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message *</label>
+          <textarea name="message" class="form-input" rows="5" placeholder="Tell us how we can help..." required></textarea>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:0.82rem;color:var(--gray-600);">
+          <input type="checkbox" required style="accent-color:var(--red);"/>
+          I agree to the <a href="#" style="color:var(--red);">Privacy Policy</a>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="contactBtn">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand"><div style="font-weight:800;color:white;margin-bottom:8px;">LifeDrop</div><p>Saving lives at the speed of light.</p></div>
+      <div class="footer-col"><h4>Network</h4><a href="index.html">Home</a><a href="inventory.html">Inventory</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 LifeDrop</span></div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    async function handleContact(e) {
+      e.preventDefault();
+      const btn = document.getElementById('contactBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      await new Promise(r => setTimeout(r, 1200));
+      showToast('✅ Message sent!', 'We\'ll get back to you within 24 hours.', 'success');
+      e.target.reset();
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    }
+  </script>
+</body>
+</html>

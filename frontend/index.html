@@ -1,0 +1,678 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LifeDrop — Saving Lives at the Speed of Light</title>
+  <script>try{if(localStorage.getItem('lifedrop_dark')==='true'){document.documentElement.style.background='#0A0A0C';}}catch(e){}</script>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <style>
+    /* ===== HOMEPAGE STYLES ===== */
+    .hero-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 32px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red-muted);
+      border: 1px solid var(--red-border);
+      color: var(--red);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      color: var(--dark);
+      margin-bottom: 18px;
+    }
+    .hero-title em { color: var(--red); font-style: italic; }
+    .hero-desc { font-size: 1rem; color: var(--gray-700); line-height: 1.7; margin-bottom: 28px; max-width: 460px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+    .hero-stat-num { font-size: 2rem; font-weight: 800; color: var(--red); }
+    .hero-stat-label { font-size: 0.75rem; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .hero-visual { display: flex; align-items: center; justify-content: center; }
+    .hero-card-float {
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+      border: 1px solid var(--gray-200);
+      width: 100%;
+      max-width: 340px;
+    }
+    .blood-drop-icon {
+      width: 64px; height: 64px;
+      background: var(--red);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(196,30,58,0.35);
+    }
+    .blood-drop-icon::after { content:''; display:block; width:24px; height:24px; background:rgba(255,255,255,0.3); border-radius:50%; transform:rotate(45deg); }
+
+    /* Live Inventory */
+    .live-inventory { background: var(--gray-100); padding: 60px 32px; }
+    .live-inventory-inner { max-width: 1200px; margin: 0 auto; }
+    .live-inventory-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+    .blood-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .blood-card { background: white; border-radius: var(--radius); padding: 20px; border: 1px solid var(--gray-200); text-align: center; transition: var(--transition); }
+    .blood-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .blood-card .blood-type { font-size: 1.8rem; font-weight: 900; font-family: var(--mono); margin-bottom: 8px; }
+    .blood-card.critical .blood-type { color: var(--red); }
+    .blood-card.stable .blood-type { color: var(--green); }
+    .blood-card.moderate .blood-type { color: var(--orange); }
+
+    /* Trusted Institutions */
+    .institutions-section { padding: 60px 32px; }
+    .institutions-section-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
+    .institution-logos { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 28px; align-items: center; justify-content: center; }
+    .institution-logo { padding: 14px 28px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); font-weight: 700; font-size: 0.85rem; color: var(--gray-700); background: white; }
+
+    /* Stories */
+    .stories { background: var(--gray-100); padding: 60px 32px; }
+    .stories-inner { max-width: 1200px; margin: 0 auto; }
+    .stories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 28px; }
+    .story-card { background: white; border-radius: var(--radius); padding: 24px; border: 1px solid var(--gray-200); }
+    .story-quote { font-size: 0.9rem; color: var(--gray-700); line-height: 1.7; font-style: italic; margin-bottom: 16px; }
+    .story-author { display: flex; align-items: center; gap: 10px; }
+    .story-name { font-weight: 700; font-size: 0.85rem; }
+    .story-role { font-size: 0.75rem; color: var(--gray-500); }
+
+    /* ===== TABLET (max 1024px) ===== */
+    @media(max-width:1024px) {
+      .hero-section { gap: 40px; padding: 60px 24px 48px; }
+      .hero-title { font-size: 2.7rem; }
+      .blood-cards-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+      .stories-grid { grid-template-columns: repeat(2, 1fr); }
+      .live-inventory { padding: 48px 24px; }
+      .institutions-section { padding: 48px 24px; }
+      .stories { padding: 48px 24px; }
+    }
+
+    /* ===== TABLET PORTRAIT (max 768px) ===== */
+    @media(max-width:768px) {
+      .hero-section { grid-template-columns: 1fr; gap: 28px; padding: 36px 20px 40px; }
+      .hero-title { font-size: 2.1rem; }
+      .hero-visual { display: none; }
+      .hero-desc { max-width: 100%; }
+      .hero-stats { gap: 12px; margin-top: 28px; }
+      .hero-stat-num { font-size: 1.7rem; }
+      .blood-cards-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .blood-card { padding: 16px 12px; }
+      .stories-grid { grid-template-columns: 1fr; gap: 14px; }
+      .live-inventory { padding: 40px 20px; }
+      .live-inventory-header { flex-direction: column; align-items: flex-start; }
+      .institutions-section { padding: 40px 20px; }
+      .institution-logo { padding: 10px 18px; font-size: 0.8rem; }
+      .institution-logos { gap: 10px; }
+      .stories { padding: 40px 20px; }
+      .story-card { padding: 18px; }
+      .hero-actions .btn { flex: 1 1 140px; justify-content: center; text-align: center; }
+    }
+
+    /* ===== MOBILE (max 480px) ===== */
+    @media(max-width:480px) {
+      .hero-section { padding: 28px 16px 36px; gap: 24px; }
+      .hero-title { font-size: 1.75rem; letter-spacing: -0.03em; }
+      .hero-desc { font-size: 0.9rem; }
+      .hero-badge { font-size: 0.68rem; padding: 4px 12px; }
+      .hero-stat-num { font-size: 1.5rem; }
+      .hero-stat-label { font-size: 0.65rem; }
+      .hero-stats { gap: 8px; }
+      .hero-actions { flex-direction: column; gap: 10px; }
+      .hero-actions .btn { width: 100%; justify-content: center; flex: none; }
+      .blood-cards-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .blood-card { padding: 14px 10px; }
+      .blood-card .blood-type { font-size: 1.5rem; }
+      .live-inventory { padding: 32px 16px; }
+      .institutions-section { padding: 32px 16px; }
+      .institution-logo { padding: 8px 14px; font-size: 0.75rem; }
+      .stories { padding: 32px 16px; }
+      .story-card { padding: 16px; }
+      .story-quote { font-size: 0.85rem; }
+    }
+
+    /* ===== SMALL MOBILE (max 375px) ===== */
+    @media(max-width:375px) {
+      .hero-title { font-size: 1.5rem; }
+      .hero-stat-num { font-size: 1.3rem; }
+      .hero-section { padding: 24px 14px 32px; }
+      .blood-card .blood-type { font-size: 1.3rem; }
+      .blood-card { padding: 12px 8px; }
+      .live-inventory { padding: 28px 14px; }
+      .institutions-section { padding: 28px 14px; }
+      .stories { padding: 28px 14px; }
+    }
+
+    /* Ticker interactive styles */
+    .emergency-ticker:hover .ticker-content { animation-play-state: paused; }
+    .ticker-item.is-owner { cursor: pointer; }
+    .ticker-item.is-owner:hover { color: white; }
+    .ticker-item.is-owner:hover::after {
+      content: ' [click to mark done]';
+      color: #86EFAC;
+      font-size: 0.7rem;
+      font-style: italic;
+    }
+    .ticker-label-critical  { color: #FF6B6B; }
+    .ticker-label-urgent    { color: #FCA5A5; }
+    .ticker-label-low       { color: #FCD34D; }
+    .ticker-label-scheduled { color: #93C5FD; }
+    .ticker-label-none      { color: #86EFAC; }
+
+    /* Dark mode homepage */
+    body.dark .hero-card-float { background: #161618; border-color: #2A2A2E; }
+    body.dark .blood-card { background: #161618; border-color: #2A2A2E; }
+    body.dark .story-card { background: #161618; border-color: #2A2A2E; }
+    body.dark .institution-logo { background: #161618; border-color: #2A2A2E; color: #D1D5DB; }
+    body.dark .hero-title { color: #F9FAFB; }
+    body.dark .hero-desc { color: #9CA3AF; }
+    body.dark .story-quote { color: #9CA3AF; }
+    body.dark .story-name { color: #F9FAFB; }
+  </style>
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>
+      Life<span class="drop">Drop</span>
+    </a>
+    <div class="navbar-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="about.html">Hospital Network</a>
+      <a href="faq.html">FAQ</a>
+      <a href="reviews.html">Reviews</a>
+    </div>
+    <div class="navbar-actions">
+      <button class="btn btn-primary" onclick="window.location.href='blood-request.html'">Emergency Coordination</button>
+      <button class="icon-btn dark-toggle" title="Toggle dark mode"></button>
+      <button class="icon-btn" id="notifBtn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notifBadge" style="display:none">0</span>
+      </button>
+      <div class="user-chip" id="userChip" onclick="handleUserChip()">
+        <div class="avatar" data-user-avatar>—</div>
+        <span data-user-name>Account</span>
+      </div>
+      <button class="menu-toggle" id="menuToggle" title="Menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-nav-menu" id="mobileMenu">
+    <button class="mobile-nav-close" id="mobileMenuClose">✕</button>
+    <a href="index.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+    <a href="inventory.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-5.5 8-8 12-8 15a8 8 0 0 0 16 0c0-3-2.5-7-8-15z"/></svg> Blood Inventory</a>
+    <a href="about.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M9 21v-4h6v4"/><path d="M12 7v6"/><path d="M9 10h6"/></svg> Hospital Network</a>
+    <a href="faq.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> FAQ</a>
+    <a href="reviews.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Reviews</a>
+    <a href="blood-request.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Emergency Request</a>
+    <a href="contact.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.72 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.64 1.5h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l.73-.73a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Contact Us</a>
+    <div style="border-top:1px solid var(--gray-100);margin-top:8px;padding-top:8px;">
+      <a id="mobileAccountLink" href="login.html" class="btn btn-primary" style="width:100%;justify-content:center;">Sign In</a>
+    </div>
+  </div>
+
+  <!-- EMERGENCY TICKER (live from database) -->
+  <div class="emergency-ticker" id="tickerWrap">
+    <div class="ticker-content" id="tickerContent">
+      <span class="ticker-item" style="opacity:0.5;cursor:default;">
+        <span style="color:#9CA3AF;font-weight:700;">LOADING</span>&nbsp; Fetching live alerts…
+      </span>
+    </div>
+  </div>
+
+  <!-- Mark-Done Confirmation Modal -->
+  <div class="modal-overlay" id="markDoneModal">
+    <div class="modal" style="max-width:420px;">
+      <div class="modal-header">
+        <div class="modal-title">Mark Request as Fulfilled</div>
+        <button class="modal-close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <p style="color:var(--gray-600);font-size:0.9rem;line-height:1.6;margin-top:12px;">
+        Have you received the blood you needed? Marking this as fulfilled will remove it from the live alerts ticker and notify matched donors that the request is closed.
+      </p>
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="confirmFulfillBtn">Yes, Mark as Fulfilled</button>
+        <button class="btn btn-outline" onclick="closeModal('markDoneModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-live" style="margin-right:4px;"></span>
+        Critical Network Live
+      </div>
+      <h1 class="hero-title">
+        Saving Lives at the<br>
+        <em>Speed of Light</em>
+      </h1>
+      <p class="hero-desc">
+        LifeDrop connects blood donors, hospitals, and recipients in real time — 
+        eliminating delays, bridging gaps, and making every second count when lives are on the line.
+      </p>
+      <div class="hero-actions">
+        <a href="blood-request.html" class="btn btn-primary btn-lg">Emergency Request</a>
+        <a href="register.html" class="btn btn-outline btn-lg">Become a Donor</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">42,408</div>
+          <div class="hero-stat-label">Lives Saved Yearly</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">127,000</div>
+          <div class="hero-stat-label">Active Donors</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">818</div>
+          <div class="hero-stat-label">Partner Hospitals</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-float">
+        <div style="text-align:center;margin-bottom:20px;">
+          <div class="blood-drop-icon"></div>
+          <div style="font-weight:800;font-size:1.1rem;">Live Network Status</div>
+          <div style="font-size:0.8rem;color:var(--gray-500);margin-top:4px;">Real-time blood availability</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:var(--red-muted);border:1px solid var(--red-border);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:900;font-family:var(--mono);color:var(--red);">O-</div>
+            <div style="font-size:0.65rem;color:var(--red);font-weight:700;">CRITICAL</div>
+            <div style="font-size:0.75rem;color:var(--gray-600);margin-top:2px;">6 units</div>
+          </div>
+          <div style="background:var(--green-light);border:1px solid rgba(22,163,74,0.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:900;font-family:var(--mono);color:var(--green);">A+</div>
+            <div style="font-size:0.65rem;color:var(--green);font-weight:700;">OPTIMAL</div>
+            <div style="font-size:0.75rem;color:var(--gray-600);margin-top:2px;">82 units</div>
+          </div>
+          <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:900;font-family:var(--mono);color:#D97706;">B-</div>
+            <div style="font-size:0.65rem;color:#D97706;font-weight:700;">MODERATE</div>
+            <div style="font-size:0.75rem;color:var(--gray-600);margin-top:2px;">45 units</div>
+          </div>
+          <div style="background:var(--green-light);border:1px solid rgba(22,163,74,0.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:900;font-family:var(--mono);color:var(--green);">O+</div>
+            <div style="font-size:0.65px;color:var(--green);font-weight:700;font-size:0.65rem;">STABLE</div>
+            <div style="font-size:0.75rem;color:var(--gray-600);margin-top:2px;">38 units</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--gray-100);display:flex;justify-content:space-between;font-size:0.72rem;color:var(--gray-500);">
+          <span style="display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse-glow 1.5s infinite;flex-shrink:0;"></span>Live · Updated just now</span>
+          <a href="inventory.html" style="color:var(--red);font-weight:600;">View All →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE INVENTORY SECTION -->
+  <section class="live-inventory">
+    <div class="live-inventory-inner">
+      <div class="live-inventory-header">
+        <div>
+          <h2 class="section-heading">Live Network Inventory</h2>
+          <p class="section-sub">Real-time blood availability across all partner hospitals</p>
+        </div>
+        <a href="inventory.html" class="btn btn-outline">View Full Inventory</a>
+      </div>
+      <div class="blood-cards-grid" id="liveInventoryGrid">
+        <!-- Rendered by JS -->
+        <div class="blood-card critical">
+          <div class="blood-type">O-</div>
+          <div class="badge badge-red" style="display:inline-flex;margin-bottom:8px;">Critical</div>
+          <div style="font-size:0.75rem;color:var(--gray-500);">12% capacity · 6 units</div>
+          <div class="progress-bar-wrap" style="margin-top:10px;">
+            <div class="progress-bar-track"><div class="progress-bar-fill fill-red" data-width="12" style="width:0"></div></div>
+          </div>
+        </div>
+        <div class="blood-card stable">
+          <div class="blood-type">A+</div>
+          <div class="badge badge-green" style="display:inline-flex;margin-bottom:8px;">✓ Optimal</div>
+          <div style="font-size:0.75rem;color:var(--gray-500);">82% capacity · 82 units</div>
+          <div class="progress-bar-wrap" style="margin-top:10px;">
+            <div class="progress-bar-track"><div class="progress-bar-fill fill-green" data-width="82" style="width:0"></div></div>
+          </div>
+        </div>
+        <div class="blood-card moderate">
+          <div class="blood-type">B-</div>
+          <div class="badge badge-orange" style="display:inline-flex;margin-bottom:8px;">◐ Moderate</div>
+          <div style="font-size:0.75rem;color:var(--gray-500);">45% capacity · 45 units</div>
+          <div class="progress-bar-wrap" style="margin-top:10px;">
+            <div class="progress-bar-track"><div class="progress-bar-fill fill-orange" data-width="45" style="width:0"></div></div>
+          </div>
+        </div>
+        <div class="blood-card stable">
+          <div class="blood-type">O+</div>
+          <div class="badge badge-green" style="display:inline-flex;margin-bottom:8px;">✓ Stable</div>
+          <div style="font-size:0.75rem;color:var(--gray-500);">95% capacity · 95 units</div>
+          <div class="progress-bar-wrap" style="margin-top:10px;">
+            <div class="progress-bar-track"><div class="progress-bar-fill fill-green" data-width="95" style="width:0"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUSTED INSTITUTIONS -->
+  <section class="institutions-section">
+    <div class="institutions-section-inner">
+      <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gray-400);margin-bottom:28px;">Trusted by World-Class Institutions</p>
+      <div class="institution-logos">
+        <div class="institution-logo">St. Jude Medical Center</div>
+        <div class="institution-logo">Bonaberi District Hospital</div>
+        <div class="institution-logo">General Hospital Yaoundé</div>
+        <div class="institution-logo">National Blood Bank</div>
+        <div class="institution-logo">Laquintinie Hospital</div>
+        <div class="institution-logo">Clinique la Providence</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORIES OF IMPACT -->
+  <section class="stories">
+    <div class="stories-inner">
+      <h2 class="section-heading">Stories of Impact</h2>
+      <p class="section-sub">Real people. Real lives saved. Real moments that matter.</p>
+      <div class="stories-grid">
+        <div class="story-card">
+          <div class="story-quote">"I got an emergency notification within minutes of posting a request. A donor showed up the next morning. LifeDrop literally saved my husband's life."</div>
+          <div class="story-author">
+            <div class="avatar">MF</div>
+            <div>
+              <div class="story-name">Marie Fofana</div>
+              <div class="story-role">Recipient · Douala</div>
+            </div>
+          </div>
+        </div>
+        <div class="story-card">
+          <div class="story-quote">"As a Gold Tier donor, I feel connected to a mission. Knowing exactly where my blood goes and receiving updates after donation motivates me to keep giving."</div>
+          <div class="story-author">
+            <div class="avatar">SJ</div>
+            <div>
+              <div class="story-name">Sarah Jenkins</div>
+              <div class="story-role">Gold Donor · 24 Donations</div>
+            </div>
+          </div>
+        </div>
+        <div class="story-card">
+          <div class="story-quote">"LifeDrop transformed our blood bank operations. Real-time inventory tracking and smart donor matching reduced our emergency response time by 70%."</div>
+          <div class="story-author">
+            <div class="avatar">EK</div>
+            <div>
+              <div class="story-name">Dr. Emmanuel Koffi</div>
+              <div class="story-role">Blood Bank Coordinator · St. Jude</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="navbar-brand" style="color:white;">
+          <div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>
+          Life<span style="color:var(--red)">Drop</span>
+        </div>
+        <p>Real-time blood donation management connecting donors, hospitals, and recipients across Cameroon.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Network</h4>
+        <a href="index.html">Home</a>
+        <a href="inventory.html">Blood Inventory</a>
+        <a href="about.html">Hospital Network</a>
+        <a href="blood-request.html">Emergency Request</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="register.html">Become a Donor</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About LifeDrop</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Emergency</h4>
+        <div class="footer-emergency">+237 600 BLOOD</div>
+        <a href="mailto:emergency@lifedrop.com" style="margin-top:10px;display:block;">emergency@lifedrop.com</a>
+        <p style="font-size:0.75rem;margin-top:10px;color:var(--gray-500);">Available 24/7 for critical requests</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 LifeDrop. All rights reserved.</span>
+      <span>Built to save lives · Cameroon 🇨🇲</span>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <!-- Socket.IO for real-time ticker updates -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    // ===== NAV HELPERS =====
+    function handleUserChip() {
+      if (Auth.isLoggedIn()) { redirectByRole(Auth.getUser()?.role); }
+      else { window.location.href = 'login.html'; }
+    }
+    function redirectByRole(role) {
+      const routes = { donor:'donor-dashboard.html', hospital:'hospital-dashboard.html', recipient:'recipient-dashboard.html', admin:'admin-dashboard.html' };
+      window.location.href = routes[role] || 'login.html';
+    }
+    function initMobileAccountLink() {
+      const link = document.getElementById('mobileAccountLink');
+      if (!link) return;
+      if (Auth.isLoggedIn()) {
+        const user   = Auth.getUser();
+        const routes = { donor:'donor-dashboard.html', hospital:'hospital-dashboard.html', recipient:'recipient-dashboard.html', admin:'admin-dashboard.html' };
+        link.href        = routes[user?.role] || 'login.html';
+        link.textContent = 'My Dashboard →';
+      }
+    }
+
+    // ===== LIVE INVENTORY =====
+    async function loadLiveInventory() {
+      try {
+        const inventory = await api.inventory.getAll();
+        if (!inventory.length) { animateProgressBars(); return; }
+
+        // Aggregate by blood group — worst status wins, sum units
+        const grouped = {};
+        inventory.forEach(item => {
+          const bg = item.bloodGroup;
+          if (!grouped[bg]) {
+            grouped[bg] = { units: 0, status: item.status };
+          }
+          grouped[bg].units += item.availableUnits;
+          // Escalate to worse status
+          const rank = { critical:0, low:1, moderate:2, stable:3, optimal:4 };
+          if ((rank[item.status] ?? 5) < (rank[grouped[bg].status] ?? 5)) {
+            grouped[bg].status = item.status;
+          }
+        });
+
+        const statusLabel = { critical:'Critical', low:'Low', moderate:'Moderate', stable:'Stable', optimal:'Optimal' };
+        const badgeClass  = { critical:'badge-red', low:'badge-red', moderate:'badge-orange', stable:'badge-green', optimal:'badge-green' };
+        const fillClass   = { critical:'fill-red', low:'fill-red', moderate:'fill-orange', stable:'fill-green', optimal:'fill-green' };
+
+        const grid = document.getElementById('liveInventoryGrid');
+        if (!grid) { animateProgressBars(); return; }
+
+        // Max units across all groups for percentage
+        const maxUnits = Math.max(...Object.values(grouped).map(g => g.units), 1);
+
+        grid.innerHTML = Object.entries(grouped).map(([bg, g]) => {
+          const pct = Math.round((g.units / maxUnits) * 100);
+          return `<div class="blood-card ${g.status === 'critical' || g.status === 'low' ? 'critical' : g.status === 'moderate' ? 'moderate' : 'stable'}">
+            <div class="blood-type">${bg}</div>
+            <div class="badge ${badgeClass[g.status] || 'badge-green'}" style="display:inline-flex;margin-bottom:8px;">${statusLabel[g.status] || g.status}</div>
+            <div style="font-size:0.75rem;color:var(--gray-500);">${pct}% capacity · ${g.units} unit${g.units !== 1 ? 's' : ''}</div>
+            <div class="progress-bar-wrap" style="margin-top:10px;">
+              <div class="progress-bar-track"><div class="progress-bar-fill ${fillClass[g.status] || 'fill-green'}" data-width="${pct}" style="width:0"></div></div>
+            </div>
+          </div>`;
+        }).join('');
+
+        animateProgressBars();
+      } catch { animateProgressBars(); }
+    }
+
+    // ===== NOTIFICATION COUNT =====
+    async function loadNotifCount() {
+      if (!Auth.isLoggedIn()) return;
+      try {
+        const data = await api.notifications.getAll();
+        updateNotifBadge(data.unreadCount || 0);
+      } catch {}
+    }
+
+    // ===== TICKER =====
+    let _tickerItems   = [];    // current items array
+    let _pendingFulfil = null;  // id of request about to be marked done
+
+    const LABEL_COLORS = {
+      critical: '#FF6B6B',
+      urgent:   '#FCA5A5',
+      low:      '#FCD34D',
+      scheduled:'#93C5FD',
+    };
+
+    function buildTickerHtml(items) {
+      if (!items.length) {
+        return `<span class="ticker-item" style="cursor:default;">
+          <span style="color:#86EFAC;font-weight:800;">ALL CLEAR</span>&nbsp; No active alerts · All blood supply systems normal
+        </span>`;
+      }
+
+      const currentUserId = Auth.isLoggedIn() ? Auth.getUser()?._id : null;
+
+      const html = items.map(item => {
+        const color   = LABEL_COLORS[item.urgency] || 'rgba(255,255,255,0.8)';
+        const isOwner = currentUserId && item.requestedBy === currentUserId && item.sourceType === 'bloodRequest';
+        const attrs   = isOwner
+          ? `data-id="${item.id}" data-source="${item.sourceType}" class="ticker-item is-owner"`
+          : `class="ticker-item" style="cursor:default;"`;
+        return `<span ${attrs}>
+          <span style="color:${color};font-weight:800;">${item.label}</span>&nbsp; ${item.message}
+        </span>`;
+      }).join('');
+
+      // Duplicate for smooth infinite loop
+      return html + html;
+    }
+
+    function setTickerAnimation(itemCount) {
+      const content = document.getElementById('tickerContent');
+      if (!content) return;
+      // ~8 seconds per item, min 20s, max 140s
+      const duration = Math.min(140, Math.max(20, itemCount * 9));
+      content.style.animation = `ticker ${duration}s linear infinite`;
+    }
+
+    function renderTicker(items) {
+      _tickerItems = items;
+      const content = document.getElementById('tickerContent');
+      if (!content) return;
+      content.innerHTML = buildTickerHtml(items);
+      setTickerAnimation(items.length || 1);
+    }
+
+    async function loadTickerData() {
+      try {
+        const items = await api.ticker.get();
+        renderTicker(items);
+      } catch {
+        // If backend is unreachable, show a quiet message (don't disrupt the page)
+        const content = document.getElementById('tickerContent');
+        if (content && content.children.length <= 1) {
+          content.innerHTML = `<span class="ticker-item" style="cursor:default;opacity:0.5;">
+            <span style="color:#9CA3AF;">OFFLINE</span>&nbsp; Live alerts unavailable · Start the backend server
+          </span>`;
+        }
+      }
+    }
+
+    // Click on owned ticker item → open confirm modal
+    document.getElementById('tickerContent').addEventListener('click', e => {
+      const item = e.target.closest('.ticker-item.is-owner');
+      if (!item) return;
+      _pendingFulfil = item.dataset.id;
+      openModal('markDoneModal');
+    });
+
+    // Confirm fulfil
+    document.getElementById('confirmFulfillBtn').addEventListener('click', async () => {
+      if (!_pendingFulfil) return;
+      const btn = document.getElementById('confirmFulfillBtn');
+      btn.disabled = true;
+      btn.textContent = 'Marking…';
+      try {
+        await api.bloodRequests.fulfill(_pendingFulfil);
+        closeModal('markDoneModal');
+        showToast('Fulfilled', 'Your blood request has been marked as done and removed from alerts', 'success');
+        _pendingFulfil = null;
+        await loadTickerData();
+      } catch (err) {
+        showToast('Error', err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Yes, Mark as Fulfilled';
+      }
+    });
+
+    // ===== SOCKET.IO (real-time ticker) =====
+    function initTickerSocket() {
+      if (typeof io === 'undefined') return;
+      const socket = io(window.SOCKET_URL || 'http://localhost:5000', { transports: ['websocket', 'polling'] });
+
+      socket.on('emergency_request_created', () => loadTickerData());
+      socket.on('inventory_low',             () => loadTickerData());
+      socket.on('request_fulfilled',         () => loadTickerData());
+      socket.on('admin_alert_created',       () => loadTickerData());
+      socket.on('admin_alert_updated',       () => loadTickerData());
+      socket.on('admin_alert_deleted',       () => loadTickerData());
+    }
+
+    // ===== INIT =====
+    initMobileAccountLink();
+    loadTickerData();
+    loadLiveInventory();
+    loadNotifCount();
+    initTickerSocket();
+
+    // Fallback poll every 60 seconds
+    setInterval(loadTickerData, 60000);
+  </script>
+</body>
+</html>

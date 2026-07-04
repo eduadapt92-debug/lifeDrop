@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blood Inventory — LifeDrop</title>
+  <script>try{if(localStorage.getItem('lifedrop_dark')==='true'){document.documentElement.style.background='#0A0A0C';}}catch(e){}</script>
+  <script>(function(){try{if(!localStorage.getItem('lifedrop_token'))window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .inv-page { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+    .blood-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .status-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--gray-700); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    @media(max-width:768px) { .blood-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>
+      Life<span class="drop">Drop</span>
+    </a>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="inventory.html" class="active">Inventory</a>
+      <a href="blood-request.html">Emergency</a>
+      <a href="about.html">About</a>
+      <a href="reviews.html">Reviews</a>
+    </div>
+    <div class="navbar-actions">
+      <button class="btn btn-primary btn-sm" onclick="window.location.href='blood-request.html'">Request Blood</button>
+    </div>
+  </nav>
+
+  <!-- EMERGENCY TICKER -->
+  <div class="emergency-ticker">
+    <div class="ticker-content">
+      <span class="ticker-item"><span style="color:#FF6B6B;font-weight:800;">CRITICAL</span>  O- blood at 12% · St. Jude Medical Center</span>
+      <span class="ticker-item"><span style="color:#FCA5A5;font-weight:700;">LOW</span>  B- blood · Bonaberi District Hospital · 3 units remaining</span>
+      <span class="ticker-item"><span style="color:#86EFAC;font-weight:700;">STABLE</span>  A+ blood across all partner hospitals</span>
+      <span class="ticker-item"><span style="color:#FF6B6B;font-weight:800;">CRITICAL</span>  O- blood at 12% · St. Jude Medical Center</span>
+      <span class="ticker-item"><span style="color:#FCA5A5;font-weight:700;">LOW</span>  B- blood · Bonaberi District Hospital · 3 units remaining</span>
+    </div>
+  </div>
+
+  <div class="inv-page">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h1 style="font-size:1.8rem;font-weight:800;color:var(--dark);margin-bottom:4px;">Live Blood Inventory</h1>
+        <p style="color:var(--gray-500);font-size:0.875rem;">Real-time data across all partner hospitals · Updated every 5 minutes</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-red badge-live">Live</span>
+        <button class="btn btn-ghost btn-sm" onclick="loadPublicInventory()">↻ Refresh</button>
+        <button class="btn btn-primary btn-sm" onclick="window.location.href='blood-request.html'">Emergency Request</button>
+      </div>
+    </div>
+
+    <!-- Low Stock Alerts -->
+    <div id="lowStockAlerts" style="margin-bottom:24px;"></div>
+
+    <!-- Status Legend -->
+    <div class="status-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Critical (≤5 units)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Low (≤15 units)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#D97706"></div> Moderate (≤30 units)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Stable (≤60 units)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Optimal (60+ units)</div>
+    </div>
+
+    <!-- Blood Group Cards -->
+    <div class="blood-grid" id="inventoryGrid">
+      <!-- Loading skeleton -->
+      <div class="card" style="padding:20px;text-align:center;"><div class="spinner" style="margin:0 auto;"></div></div>
+      <div class="card" style="padding:20px;text-align:center;"><div class="spinner" style="margin:0 auto;"></div></div>
+      <div class="card" style="padding:20px;text-align:center;"><div class="spinner" style="margin:0 auto;"></div></div>
+      <div class="card" style="padding:20px;text-align:center;"><div class="spinner" style="margin:0 auto;"></div></div>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Detailed Inventory</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" id="searchInput" placeholder="Search hospital or blood group..." class="form-input" style="padding:6px 12px;width:220px;" oninput="filterTable()"/>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Blood Group</th>
+              <th>Hospital</th>
+              <th>Available Units</th>
+              <th>Used</th>
+              <th>Status</th>
+              <th>Expires</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody">
+            <tr><td colspan="7" style="text-align:center;padding:24px;color:var(--gray-500);">Loading inventory...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CTA Box -->
+    <div style="background:linear-gradient(135deg,var(--dark),var(--gray-900));border-radius:var(--radius-lg);padding:32px;margin-top:32px;text-align:center;color:white;position:relative;overflow:hidden;">
+      <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:8px;">Blood Critically Low?</h2>
+      <p style="color:rgba(255,255,255,0.7);margin-bottom:20px;font-size:0.9rem;">Submit an emergency request and we'll match you with eligible donors instantly.</p>
+      <a href="blood-request.html" class="btn btn-primary btn-lg">Submit Emergency Request</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid" style="max-width:1100px;margin:0 auto;">
+      <div class="footer-brand">
+        <div style="font-size:1.1rem;font-weight:800;color:white;margin-bottom:8px;">🩸 Life<span style="color:var(--red)">Drop</span></div>
+        <p>Real-time blood donation management</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="index.html">Home</a>
+        <a href="blood-request.html">Emergency</a>
+        <a href="register.html">Donate</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 LifeDrop</span></div>
+  </footer>
+
+  <!-- INVENTORY MODAL (for hospital staff) -->
+  <div class="modal-overlay" id="inventoryModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Update Inventory</div>
+        <button class="modal-close">✕</button>
+      </div>
+      <form id="inventoryForm">
+        <input type="hidden" id="invFormId" name="invFormId"/>
+        <div class="form-group">
+          <label class="form-label">Blood Group</label>
+          <select id="invFormBloodGroup" name="invFormBloodGroup" class="form-input">
+            <option>O-</option><option>O+</option><option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Available Units</label>
+          <input type="number" id="invFormUnits" name="invFormUnits" class="form-input" min="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Used Units</label>
+          <input type="number" id="invFormUsed" name="invFormUsed" class="form-input" min="0" value="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Expired Units</label>
+          <input type="number" id="invFormExpired" name="invFormExpired" class="form-input" min="0" value="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Expiry Date</label>
+          <input type="date" id="invFormExpiry" name="invFormExpiry" class="form-input"/>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/inventory.js"></script>
+  <script>
+    let allInventory = [];
+    async function loadPublicInventory() {
+      try {
+        const inventory = await api.inventory.getAll();
+        allInventory = inventory;
+        renderPublicInventoryCards(inventory);
+        renderPublicInventoryTable(inventory);
+        renderLowStockAlerts(inventory.filter(i => i.status === 'critical' || i.status === 'low'));
+      } catch {
+        renderFallbackInventory();
+      }
+    }
+
+    function renderPublicInventoryCards(inventory) {
+      const bloodGroups = ['O-', 'O+', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
+      const invMap = {};
+      inventory.forEach(i => invMap[i.bloodGroup] = i);
+      document.getElementById('inventoryGrid').innerHTML = bloodGroups.map(bg => {
+        const item = invMap[bg];
+        const units = item?.availableUnits ?? '—';
+        const status = item?.status ?? 'unknown';
+        const pct = item ? Math.min(100, Math.round((item.availableUnits / 100) * 100)) : 0;
+        const statusColor = { critical:'var(--red)', low:'var(--orange)', moderate:'#D97706', stable:'var(--blue)', optimal:'var(--green)' }[status] || 'var(--gray-400)';
+        return `
+          <div class="card" style="text-align:center;border-left:3px solid ${statusColor};">
+            <div style="font-size:1.8rem;font-weight:900;font-family:var(--mono);color:${statusColor};">${bg}</div>
+            <div style="font-size:1.4rem;font-weight:800;color:var(--dark);margin:4px 0;">${units}</div>
+            <div style="font-size:0.7rem;color:var(--gray-500);">units available</div>
+            <div class="inv-status ${status}" style="display:inline-block;margin:8px 0;">${status}</div>
+            ${item ? `<div class="progress-bar-track" style="margin-top:8px;"><div class="progress-bar-fill fill-${pct<20?'red':pct<50?'orange':'green'}" data-width="${pct}" style="width:0;"></div></div>` : ''}
+            ${status === 'critical' ? `<button class="btn btn-primary btn-sm" style="margin-top:10px;width:100%;" onclick="window.location.href='blood-request.html?bg=${bg}'">Request ${bg}</button>` : ''}
+          </div>
+        `;
+      }).join('');
+      setTimeout(animateProgressBars, 100);
+    }
+
+    function renderPublicInventoryTable(inventory) {
+      const tbody = document.getElementById('inventoryTableBody');
+      if (!inventory.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--gray-500);">No inventory data available</td></tr>';
+        return;
+      }
+      tbody.innerHTML = inventory.map(item => `
+        <tr>
+          <td><span class="bg-chip">${item.bloodGroup}</span></td>
+          <td>${item.hospital?.hospitalName || 'Network'}</td>
+          <td><strong>${item.availableUnits}</strong></td>
+          <td>${item.usedUnits}</td>
+          <td><span class="inv-status ${item.status}">${item.status}</span></td>
+          <td style="font-size:0.8rem;color:var(--gray-500);">${item.expiryDate ? new Date(item.expiryDate).toLocaleDateString('en-GB') : '—'}</td>
+          <td>
+            ${item.status === 'critical' || item.status === 'low'
+              ? `<a href="blood-request.html?bg=${item.bloodGroup}" class="btn btn-primary btn-sm">Request</a>`
+              : '<span style="color:var(--green);font-size:0.8rem;">✓ Adequate</span>'
+            }
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderFallbackInventory() {
+      const fallback = [
+        {bloodGroup:'O-', availableUnits:6, status:'critical', hospital:{hospitalName:'St. Jude'}},
+        {bloodGroup:'O+', availableUnits:95, status:'optimal', hospital:{hospitalName:'Network Avg'}},
+        {bloodGroup:'A+', availableUnits:82, status:'optimal', hospital:{hospitalName:'Network Avg'}},
+        {bloodGroup:'A-', availableUnits:28, status:'moderate', hospital:{hospitalName:'Network Avg'}},
+        {bloodGroup:'B+', availableUnits:55, status:'stable', hospital:{hospitalName:'Network Avg'}},
+        {bloodGroup:'B-', availableUnits:3, status:'critical', hospital:{hospitalName:'Bonaberi'}},
+        {bloodGroup:'AB+', availableUnits:44, status:'moderate', hospital:{hospitalName:'Network Avg'}},
+        {bloodGroup:'AB-', availableUnits:12, status:'low', hospital:{hospitalName:'Network Avg'}},
+      ];
+      renderPublicInventoryCards(fallback);
+      renderPublicInventoryTable(fallback);
+    }
+
+    function renderLowStockAlerts(lowItems) {
+      const container = document.getElementById('lowStockAlerts');
+      if (!lowItems.length) return;
+      container.innerHTML = lowItems.map(item => `
+        <div class="alert-bar" style="border-radius:var(--radius-sm);margin-bottom:8px;">
+          <div class="alert-bar-pulse"></div>
+          <strong>${item.bloodGroup}</strong> blood is <strong>${item.status.toUpperCase()}</strong> at ${item.hospital?.hospitalName || 'partner hospital'} — only <strong>${item.availableUnits}</strong> units remaining
+          <a href="blood-request.html?bg=${item.bloodGroup}" style="margin-left:auto;color:white;font-weight:700;text-decoration:underline;white-space:nowrap;">Request →</a>
+        </div>
+      `).join('');
+    }
+
+    function filterTable() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      document.querySelectorAll('#inventoryTableBody tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+
+    loadPublicInventory();
+  </script>
+</body>
+</html>

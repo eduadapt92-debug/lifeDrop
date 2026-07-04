@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About LifeDrop — Saving Lives Together</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <style>
+    .about-hero { background: linear-gradient(135deg, var(--dark), var(--gray-900)); color: white; padding: 80px 32px; text-align: center; }
+    .about-hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 16px; }
+    .about-hero p { color: rgba(255,255,255,0.7); font-size: 1.05rem; max-width: 580px; margin: 0 auto; }
+    .mission-section { max-width: 1100px; margin: 0 auto; padding: 60px 32px; }
+    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .mission-text h2 { font-size: 2rem; font-weight: 800; color: var(--dark); margin-bottom: 16px; }
+    .mission-text p { color: var(--gray-600); line-height: 1.8; margin-bottom: 16px; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .value-card { text-align: center; padding: 28px 20px; border: 1px solid var(--gray-200); border-radius: var(--radius); background: white; }
+    .value-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .value-title { font-weight: 800; font-size: 1rem; color: var(--dark); margin-bottom: 8px; }
+    .value-desc { font-size: 0.85rem; color: var(--gray-600); line-height: 1.6; }
+    .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .team-card { text-align: center; padding: 24px 16px; border: 1px solid var(--gray-200); border-radius: var(--radius); }
+    .team-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--red); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; color: white; }
+    .team-name { font-weight: 700; font-size: 0.9rem; }
+    .team-role { font-size: 0.75rem; color: var(--gray-500); margin-top: 4px; }
+    .stats-band { background: var(--red); color: white; padding: 40px 32px; }
+    .stats-band-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; }
+    .stat-band-num { font-size: 2.2rem; font-weight: 800; font-family: var(--mono); }
+    .stat-band-label { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+    @media(max-width:768px) {
+      .mission-grid { grid-template-columns: 1fr; gap: 32px; }
+      .values-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .stats-band-inner { grid-template-columns: 1fr 1fr; }
+      .about-hero h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand"><div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100" fill="var(--red)"><path d="M50 8 C50 8 18 32 18 56 C18 74 32 88 50 88 C68 88 82 74 82 56 C82 32 50 8 50 8Z"/></svg></div>Life<span class="drop">Drop</span></a>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="about.html" class="active">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="reviews.html">Reviews</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="register.html" class="btn btn-primary btn-sm">Join LifeDrop</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="about-hero">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(196,30,58,0.3);border:1px solid rgba(196,30,58,0.5);color:#FF6B6B;padding:6px 16px;border-radius:20px;font-size:0.78rem;font-weight:700;margin-bottom:20px;text-transform:uppercase;letter-spacing:0.06em;">
+      Cameroon's #1 Blood Network
+    </div>
+    <h1>About LifeDrop</h1>
+    <p>We built LifeDrop to end the tragedy of preventable blood shortage deaths across Cameroon and beyond.</p>
+  </div>
+
+  <!-- STATS BAND -->
+  <div class="stats-band">
+    <div class="stats-band-inner">
+      <div><div class="stat-band-num">14,820+</div><div class="stat-band-label">Units Donated</div></div>
+      <div><div class="stat-band-num">4,940+</div><div class="stat-band-label">Lives Saved</div></div>
+      <div><div class="stat-band-num">127</div><div class="stat-band-label">Partner Hospitals</div></div>
+      <div><div class="stat-band-num">45 min</div><div class="stat-band-label">Avg Response Time</div></div>
+    </div>
+  </div>
+
+  <!-- MISSION -->
+  <section class="mission-section">
+    <div class="mission-grid">
+      <div class="mission-text">
+        <div style="display:inline-flex;align-items:center;gap:6px;background:var(--red-muted);border:1px solid var(--red-border);color:var(--red);padding:4px 12px;border-radius:12px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px;">Our Mission</div>
+        <h2>No one should die waiting for blood.</h2>
+        <p>Every year, thousands of preventable deaths occur in Cameroon because hospitals run out of blood and patients can't find donors in time. LifeDrop was built to solve this.</p>
+        <p>We connect eligible blood donors with hospitals and recipients in real time — eliminating the information gap, reducing delays, and making blood donation data-driven and efficient.</p>
+        <p>From emergency alerts to smart donor matching, every feature is designed with one mission in mind: save more lives, faster.</p>
+        <a href="register.html" class="btn btn-primary" style="margin-top:8px;">Join Our Network →</a>
+      </div>
+      <div>
+        <div style="background:var(--gray-100);border-radius:var(--radius-lg);padding:32px;">
+          <div style="font-weight:800;font-size:0.85rem;color:var(--dark);margin-bottom:20px;text-transform:uppercase;letter-spacing:0.06em;">How LifeDrop Works</div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--red);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">1</div>
+              <div><strong>Donors register</strong> with their blood group, location, and health status.</div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--red);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">2</div>
+              <div><strong>Hospitals log emergencies</strong> and our algorithm matches eligible nearby donors.</div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--red);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">3</div>
+              <div><strong>Donors are notified</strong> instantly and can accept requests from their phones.</div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--green);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">✓</div>
+              <div><strong>Blood is donated</strong>, recorded, and the patient is saved.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section style="background:var(--gray-100);padding:60px 32px;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <h2 class="section-heading" style="text-align:center;">Our Core Values</h2>
+      <p class="section-sub" style="text-align:center;">The principles that guide every decision we make.</p>
+      <div class="values-grid" style="margin-top:32px;">
+        <div class="value-card">
+          <div class="value-icon">⚡</div>
+          <div class="value-title">Speed First</div>
+          <div class="value-desc">In blood emergencies, every minute counts. We optimize every part of the system for rapid response.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🔬</div>
+          <div class="value-title">Data-Driven</div>
+          <div class="value-desc">Smart matching algorithms, real-time inventory, and predictive analytics ensure the right blood reaches the right patient.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <div class="value-title">Community First</div>
+          <div class="value-desc">We believe in the power of communities to save each other. LifeDrop connects people, not just systems.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🔒</div>
+          <div class="value-title">Privacy & Trust</div>
+          <div class="value-desc">All donor data is handled with the highest standards of privacy and security. Your information is never sold.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">♿</div>
+          <div class="value-title">Accessibility</div>
+          <div class="value-desc">LifeDrop is designed to work on any device, in low-bandwidth environments, for everyone who needs it.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🌍</div>
+          <div class="value-title">African Impact</div>
+          <div class="value-desc">Built for Cameroon, designed to scale across Africa. Our vision is a connected blood network for the entire continent.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOSPITAL NETWORK -->
+  <section class="mission-section">
+    <h2 class="section-heading" style="text-align:center;">Our Hospital Network</h2>
+    <p class="section-sub" style="text-align:center;">127 trusted institutions across Cameroon</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;justify-content:center;">
+      <div class="institution-logo" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:12px 20px;font-weight:700;font-size:0.85rem;">St. Jude Medical Center</div>
+      <div class="institution-logo" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:12px 20px;font-weight:700;font-size:0.85rem;">Bonaberi District Hospital</div>
+      <div class="institution-logo" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:12px 20px;font-weight:700;font-size:0.85rem;">General Hospital Yaoundé</div>
+      <div class="institution-logo" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:12px 20px;font-weight:700;font-size:0.85rem;">Clinique la Providence</div>
+      <div class="institution-logo" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:12px 20px;font-weight:700;font-size:0.85rem;">National Blood Bank</div>
+      <div class="institution-logo" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:12px 20px;font-weight:700;font-size:0.85rem;">Laquintinie Hospital</div>
+      <div class="institution-logo" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:12px 20px;font-weight:700;font-size:0.85rem;color:var(--gray-500);">+ 121 more hospitals</div>
+    </div>
+    <div style="text-align:center;margin-top:28px;">
+      <a href="register.html" class="btn btn-outline">Register Your Hospital →</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="background:var(--red);padding:60px 32px;text-align:center;">
+    <h2 style="color:white;font-size:2rem;font-weight:800;margin-bottom:12px;">Ready to Save Lives?</h2>
+    <p style="color:rgba(255,255,255,0.8);margin-bottom:24px;">Join thousands of donors, hospitals, and recipients on Cameroon's largest blood network.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="register.html" class="btn btn-lg" style="background:white;color:var(--red);font-weight:700;">Register as Donor</a>
+      <a href="blood-request.html" class="btn btn-lg" style="background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.3);">Emergency Request</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand"><div style="font-weight:800;color:white;margin-bottom:8px;">LifeDrop</div><p>Saving lives at the speed of light.</p></div>
+      <div class="footer-col"><h4>Network</h4><a href="index.html">Home</a><a href="inventory.html">Inventory</a><a href="blood-request.html">Emergency</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 LifeDrop · Cameroon 🇨🇲</span></div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

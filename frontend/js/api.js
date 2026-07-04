@@ -3,10 +3,10 @@
 // Resolve backend URL at runtime based on the current environment.
 // Priority:
 //   1. window.LIFEDROP_API_URL  — explicit override (set before this script loads)
-//   2. Render production       — any non-localhost hostname uses the Render backend
+//   2. Railway production       — any non-localhost hostname uses the Railway backend
 //   3. Local development        — localhost / 127.0.0.1 falls back to localhost:5000
 (function () {
-  const RENDER_BACKEND = 'https://lifedrop-backend.onrender.com';
+  const RENDER_BACKEND = 'https://lifedrop-backend-production.up.railway.app';
   const LOCAL_BACKEND   = 'http://localhost:5000';
 
   const isLocal = (

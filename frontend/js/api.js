@@ -6,7 +6,7 @@
 //   2. Railway production       — any non-localhost hostname uses the Railway backend
 //   3. Local development        — localhost / 127.0.0.1 falls back to localhost:5000
 (function () {
-  const RENDER_BACKEND = 'https://lifedrop-backend-production.up.railway.app';
+  const RAILWAY_BACKEND = 'https://lifedrop-backend-production.up.railway.app';
   const LOCAL_BACKEND   = 'http://localhost:5000';
 
   const isLocal = (
@@ -17,7 +17,7 @@
 
   const backendOrigin =
     window.LIFEDROP_API_URL ||
-    (isLocal ? LOCAL_BACKEND : RENDER_BACKEND);
+    (isLocal ? LOCAL_BACKEND : RAILWAY_BACKEND);
 
   window.API_BASE   = backendOrigin + '/api';
   window.SOCKET_URL = backendOrigin;

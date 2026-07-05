@@ -58,7 +58,7 @@ const register = async (req, res) => {
   }
 };
 
-// @desc   Login user
+// @desc   Login user - step 1: verify password, send OTP
 // @route  POST /api/auth/login
 const login = async (req, res) => {
   try {
@@ -73,12 +73,66 @@ const login = async (req, res) => {
       return res.status(403).json({ message: 'Your account has been suspended' });
     }
 
+    const otp = crypto.randomInt(100000, 999999).toString();
+    user.otpCode = crypto.createHash('sha256').update(otp).digest('hex');
+    user.otpExpire = Date.now() + 5 * 60 * 1000; // 5 minutes
+    await user.save({ validateBeforeSave: false });
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: 'LifeDrop Login Verification Code',
+        html: `
+          <h2>Login Verification</h2>
+          <p>Your LifeDrop verification code is:</p>
+          <h1 style="letter-spacing:4px;">${otp}</h1>
+          <p>This code expires in 5 minutes. If you didn't try to log in, you can ignore this email.</p>
+        `,
+      });
+    } catch (emailError) {
+      user.otpCode = undefined;
+      user.otpExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+      return res.status(500).json({ message: 'Could not send verification code. Please try again.' });
+    }
+
+    res.json({
+      requiresOtp: true,
+      userId: user._id,
+      message: 'Verification code sent to your email',
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc   Login user - step 2: verify OTP, issue token
+// @route  POST /api/auth/verify-otp
+const verifyOtp = async (req, res) => {
+  try {
+    const { userId, otp } = req.body;
+    const hashedOtp = crypto.createHash('sha256').update(otp || '').digest('hex');
+
+    const user = await User.findOne({
+      _id: userId,
+      otpCode: hashedOtp,
+      otpExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired verification code' });
+    }
+
+    user.otpCode = undefined;
+    user.otpExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+
     await createAuditLog({
       actor: user._id,
       action: 'LOGIN',
       entity: 'User',
       entityId: user._id,
-      description: `User logged in: ${email}`,
+      description: `User logged in: ${user.email}`,
       ipAddress: req.ip,
     });
 
@@ -94,6 +148,38 @@ const login = async (req, res) => {
         isVerified: user.isVerified,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc   Resend login OTP
+// @route  POST /api/auth/resend-otp
+const resendOtp = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const otp = crypto.randomInt(100000, 999999).toString();
+    user.otpCode = crypto.createHash('sha256').update(otp).digest('hex');
+    user.otpExpire = Date.now() + 5 * 60 * 1000;
+    await user.save({ validateBeforeSave: false });
+
+    await sendEmail({
+      to: user.email,
+      subject: 'LifeDrop Login Verification Code',
+      html: `
+        <h2>Login Verification</h2>
+        <p>Your new LifeDrop verification code is:</p>
+        <h1 style="letter-spacing:4px;">${otp}</h1>
+        <p>This code expires in 5 minutes.</p>
+      `,
+    });
+
+    res.json({ message: 'A new verification code has been sent' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -179,4 +265,4 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getMe, forgotPassword, resetPassword };
+module.exports = { register, login, verifyOtp, resendOtp, getMe, forgotPassword, resetPassword };

@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema({
   status: { type: String, enum: ['active', 'suspended', 'pending'], default: 'active' },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
+  otpCode: String,
+  otpExpire: Date,
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {

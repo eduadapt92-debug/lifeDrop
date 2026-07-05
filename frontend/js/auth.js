@@ -20,12 +20,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
       try {
         const data = await api.auth.login({ email, password });
-        Auth.setSession(data.token, data.user);
 
         if (document.getElementById('rememberMe')?.checked) {
           localStorage.setItem('lifedrop_remember', email);
         }
 
+        if (data.requiresOtp) {
+          pendingOtpUserId = data.userId;
+          btn.disabled = false;
+          btn.innerHTML = 'Sign In';
+          showToast('Check your email', data.message || 'Enter the verification code we sent you', 'info');
+          openModal('otpModal');
+          document.getElementById('otpCode')?.focus();
+          return;
+        }
+
+        Auth.setSession(data.token, data.user);
         showToast('Welcome back!', `Hello, ${data.user.name}`, 'success');
         setTimeout(() => redirectByRole(data.user.role), 600);
       } catch (err) {
@@ -42,6 +52,43 @@ document.addEventListener('DOMContentLoaded', () => {
       const rememberCheckbox = document.getElementById('rememberMe');
       if (rememberCheckbox) rememberCheckbox.checked = true;
     }
+  }
+
+  // ===== OTP VERIFICATION =====
+  let pendingOtpUserId = null;
+  const otpForm = document.getElementById('otpForm');
+  if (otpForm) {
+    otpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = otpForm.querySelector('button[type=submit]');
+      const otp = document.getElementById('otpCode').value.trim();
+      if (!otp) return showToast('Error', 'Please enter the verification code', 'error');
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+
+      try {
+        const data = await api.auth.verifyOtp({ userId: pendingOtpUserId, otp });
+        Auth.setSession(data.token, data.user);
+        closeModal('otpModal');
+        showToast('Welcome back!', `Hello, ${data.user.name}`, 'success');
+        setTimeout(() => redirectByRole(data.user.role), 600);
+      } catch (err) {
+        showToast('Verification failed', err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Verify & Sign In';
+      }
+    });
+
+    document.getElementById('resendOtpBtn')?.addEventListener('click', async () => {
+      if (!pendingOtpUserId) return;
+      try {
+        await api.auth.resendOtp({ userId: pendingOtpUserId });
+        showToast('Code sent', 'A new verification code has been sent to your email', 'success');
+      } catch (err) {
+        showToast('Error', err.message, 'error');
+      }
+    });
   }
 
   // ===== REGISTER PAGE =====

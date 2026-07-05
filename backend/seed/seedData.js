@@ -41,7 +41,7 @@ const seedData = async () => {
     // Create Admin
     const admin = await User.create({
       name: 'Admin LifeDrop',
-      email: 'admin@lifedrop.com',
+      email: 'adminlifedrop@gmail.com',
       phone: '+237600000001',
       password: 'Admin@123',
       role: 'admin',
@@ -348,7 +348,7 @@ const seedData = async () => {
     console.log('✅ Seed data created successfully!');
     console.log('');
     console.log('🔑 Test Accounts:');
-    console.log('  Admin:    admin@lifedrop.com    / Admin@123');
+    console.log('  Admin:    adminlifedrop@gmail.com / Admin@123');
     console.log('  Donor:    sarah@lifedrop.com    / Donor@123');
     console.log('  Hospital: hospital@stjude.com   / Hospital@123');
     console.log('  Recipient: marie@lifedrop.com   / Recipient@123');
